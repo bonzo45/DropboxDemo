@@ -73,7 +73,7 @@ public class LocalStorage {
    */
   public static void newFile(String filePathString, InputStream inputStream) {
     /* Write the file to disk */
-    saveFile(FILE_PATH + filePathString, inputStream);
+    saveFile(FILE_PATH + "/" + filePathString, inputStream);
 
     /* Gather information about file */
     FileModel info = getFile(filePathString);
@@ -82,7 +82,7 @@ public class LocalStorage {
     String jsonInfo = JsonConverter.getJSONString(info);
 
     /* Store the metadata to a .meta file */
-    saveMetaData(FILE_PATH + filePathString + META_DATA_SUFFIX, jsonInfo);
+    saveMetaData(FILE_PATH + "/" + filePathString + META_DATA_SUFFIX, jsonInfo);
   }
 
   /**
