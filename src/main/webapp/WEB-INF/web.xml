@@ -19,6 +19,6 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>Jersey Web Application</servlet-name>
-		<url-pattern>/rest/*</url-pattern>
+		<url-pattern>/dropbox/*</url-pattern>
 	</servlet-mapping>
 </web-app>
