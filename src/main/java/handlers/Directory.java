@@ -26,7 +26,6 @@ public class Directory {
     return LocalStorage.getDirectory("").toJSON();
   }
   
-  /*
   @POST
   @Consumes(MediaType.MULTIPART_FORM_DATA)
   public Response uploadFile(
@@ -40,5 +39,4 @@ public class Directory {
     return Response.status(200).entity(output).build();
 
   }
-  */
 }
