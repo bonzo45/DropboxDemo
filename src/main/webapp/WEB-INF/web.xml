@@ -4,30 +4,32 @@
 
 <web-app>
 	<display-name>Sam's Dropbox Demo</display-name>
+
+	<!-- Servlet to handle dynamic requests -->
 	<servlet>
-		<!-- Servlet to handle dynamic requests -->
 		<servlet-name>Jersey Servlet</servlet-name>
 		<servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
-		<!-- Tell it where the resource 'handlers' are -->
+
+		<!-- Where are the resource handlers? -->
 		<init-param>
 			<param-name>jersey.config.server.provider.packages</param-name>
 			<param-value>handlers</param-value>
 		</init-param>
-		<!-- Not exactly sure what this does... -->
-		<init-param>
-			<param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
-			<param-value>true</param-value>
-		</init-param>
-		<!-- Tell it where the 'application' is defined -->
+
+		<!-- Where is the 'application'? -->
 		<init-param>
 			<param-name>javax.ws.rs.Application</param-name>
 			<param-value>application.DemoApplication</param-value>
 		</init-param>
+
+		<!-- Make this servlet the first one to load when the web server starts. -->
 		<load-on-startup>1</load-on-startup>
 	</servlet>
+
 	<!-- Map the above servlet to anything after /dropbox/... -->
 	<servlet-mapping>
 		<servlet-name>Jersey Servlet</servlet-name>
 		<url-pattern>/dropbox/*</url-pattern>
 	</servlet-mapping>
+	
 </web-app>
