@@ -5,7 +5,7 @@
 <web-app>
 	<display-name>Sam's Dropbox Demo</display-name>
 	<servlet>
-	 <!-- Servlet to handle dynamic requests -->
+		<!-- Servlet to handle dynamic requests -->
 		<servlet-name>Jersey Servlet</servlet-name>
 		<servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
 		<init-param>
