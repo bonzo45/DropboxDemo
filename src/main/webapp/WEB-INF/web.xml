@@ -3,9 +3,10 @@
  "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
 <web-app>
-	<display-name>Archetype Created Web Application</display-name>
+	<display-name>Sam's Dropbox Demo</display-name>
 	<servlet>
-		<servlet-name>Jersey Web Application</servlet-name>
+	 <!-- Servlet to handle dynamic requests -->
+		<servlet-name>Jersey Servlet</servlet-name>
 		<servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
 		<init-param>
 			<param-name>jersey.config.server.provider.packages</param-name>
@@ -17,8 +18,9 @@
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
+	<!-- Map the above servlet to anything after /dropbox/... -->
 	<servlet-mapping>
-		<servlet-name>Jersey Web Application</servlet-name>
+		<servlet-name>Jersey Servlet</servlet-name>
 		<url-pattern>/dropbox/*</url-pattern>
 	</servlet-mapping>
 </web-app>
