@@ -41,7 +41,12 @@ public class LocalStorage {
       return new FileModel();
     }
 
-    return new models.FileModel(attr);
+    
+    // Split the file name from the path
+    String name = filePath.getFileName().toString();
+    String path = filePathString.substring(0, filePathString.length() - name.length());
+    
+    return new models.FileModel(name, path, attr);
   }
 
   /**

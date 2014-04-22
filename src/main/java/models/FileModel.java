@@ -8,6 +8,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class FileModel implements BasicFileAttributes {
 
+  /* Name and Path */
+  public String name;
+  public String path;
+
   /* Standard BasicFileAttributes Fields */
   public long creationTime;
   public long lastAccessTime;
@@ -17,12 +21,15 @@ public class FileModel implements BasicFileAttributes {
   public boolean isRegularFile;
   public boolean isSymbolicLink;
   public long size;
-  
+
   /* Dropbox Fields */
   public boolean isInDropbox;
   public String dropboxPath;
-  
-  public FileModel(BasicFileAttributes attr) {
+
+  public FileModel(String name, String path, BasicFileAttributes attr) {
+    this.name = name;
+    this.path = path;
+
     creationTime = attr.creationTime().toMillis();
     lastAccessTime = attr.lastAccessTime().toMillis();
     lastModifiedTime = attr.lastModifiedTime().toMillis();
@@ -31,28 +38,29 @@ public class FileModel implements BasicFileAttributes {
     isRegularFile = attr.isRegularFile();
     isSymbolicLink = attr.isSymbolicLink();
     size = attr.size();
-    
+
     isInDropbox = false;
     dropboxPath = "";
   }
-  
+
   public FileModel() {
 
   }
-  
+
   @JsonCreator
   public FileModel(
-    @JsonProperty("creationTime") long creationTime,
-    @JsonProperty("lastAccessTime") long lastAccessTime,
-    @JsonProperty("lastModifiedTime") long lastModifiedTime,
-    @JsonProperty("isDirectory") boolean isDirectory,
-    @JsonProperty("isOther") boolean isOther,
-    @JsonProperty("isRegularFile") boolean isRegularFile,
-    @JsonProperty("isSymbolicLink") boolean isSymbolicLink,
-    @JsonProperty("size") long size,
-    @JsonProperty("isInDropbox") boolean isInDropbox,
-    @JsonProperty("dropboxPath") String dropboxPath
-  ) {
+      @JsonProperty("name") String name,
+      @JsonProperty("path") String path,
+      @JsonProperty("creationTime") long creationTime,
+      @JsonProperty("lastAccessTime") long lastAccessTime,
+      @JsonProperty("lastModifiedTime") long lastModifiedTime,
+      @JsonProperty("isDirectory") boolean isDirectory,
+      @JsonProperty("isOther") boolean isOther,
+      @JsonProperty("isRegularFile") boolean isRegularFile,
+      @JsonProperty("isSymbolicLink") boolean isSymbolicLink,
+      @JsonProperty("size") long size,
+      @JsonProperty("isInDropbox") boolean isInDropbox,
+      @JsonProperty("dropboxPath") String dropboxPath) {
     this.creationTime = creationTime;
     this.lastAccessTime = lastAccessTime;
     this.lastModifiedTime = lastModifiedTime;
@@ -67,6 +75,8 @@ public class FileModel implements BasicFileAttributes {
 
   public String toJSON() {
     String result = "";
+    result += "\"name\": \"" + name + "\",";
+    result += "\"path\": \"" + path + "\",";
     result += "\"creationTime\": \"" + creationTime + "\",";
     result += "\"lastAccessTime\": \"" + lastAccessTime + "\",";
     result += "\"lastModifiedTime\": \"" + lastModifiedTime + "\",";
@@ -124,15 +134,15 @@ public class FileModel implements BasicFileAttributes {
   public Object fileKey() {
     return null;
   }
-  
+
   public boolean isInDropbox() {
     return isInDropbox;
   }
-  
+
   public String dropboxPath() {
     return dropboxPath;
   }
-  
+
   /* Getters and Setters (for Jackson) */
 
   public long getCreationTime() {
@@ -194,5 +204,5 @@ public class FileModel implements BasicFileAttributes {
   public void setInDropbox(boolean isInDropbox) {
     this.isInDropbox = isInDropbox;
   }
-  
+
 }
