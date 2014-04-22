@@ -11,7 +11,7 @@ import com.dropbox.core.DbxEntry;
 
 import dropbox.RESTDropbox;
 
-@Path("/directory")
+@Path("/dropbox")
 public class DropboxDirectory {
 
   // Returns account details

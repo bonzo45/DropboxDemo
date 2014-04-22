@@ -8,13 +8,15 @@ import javax.ws.rs.core.MediaType;
 
 import storage.LocalStorage;
 
-@Path("/files/{file_name}")
+@Path("/files")
 public class File {
 
   // Returns the persistent access token
   @GET
+  @Path("{file_name}")
   @Produces(MediaType.APPLICATION_JSON)
   public String getFile(@PathParam("file_name") String fileName) {
+    System.err.println("File Information: " + fileName);
     return LocalStorage.getFile(fileName).toJSON();
   }
 }
