@@ -3,7 +3,7 @@ var FileView = Backbone.View.extend({
 	tagName : "tr",
 
 	// The template can be found here
-	template: $("#todo-template").html(),
+	template: $("#file-template").html(),
 
 	initialize: function(filemodel) {
 		this.model = filemodel;

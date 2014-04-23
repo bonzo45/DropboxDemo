@@ -2,9 +2,11 @@ package storage;
 
 import jackson.JsonConverter;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -28,19 +30,18 @@ public class LocalStorage {
    *          - path of the file.
    * @return File information.
    */
-  public static FileModel getFile(String filePathString) {
+  private static FileModel getFile(String filePathString) {
     // Create Path
     java.nio.file.Path filePath = FileSystems.getDefault().getPath(FILE_PATH,
         filePathString);
 
-    // Try to read attributes.
+    // Try to read attributes from the file itself.
     BasicFileAttributes attr;
     try {
       attr = Files.readAttributes(filePath, BasicFileAttributes.class);
     } catch (IOException e) {
       return new FileModel();
     }
-
     
     // Split the file name from the path
     String name = filePath.getFileName().toString();
@@ -62,7 +63,11 @@ public class LocalStorage {
 
     DirectoryModel directoryModel = new DirectoryModel();
     for (int i = 0; i < listOfFiles.length; i++) {
-      directoryModel.addFile(getFile(listOfFiles[i].getName()));
+      // Don't return meta files...
+      String fileName = listOfFiles[i].getName();
+      if (!fileName.endsWith(META_DATA_SUFFIX) && !fileName.startsWith(".")) {
+        directoryModel.addFile(getMetaData(listOfFiles[i].getName()));
+      }
     }
 
     return directoryModel;
@@ -118,6 +123,11 @@ public class LocalStorage {
 
   }
 
+  /**
+   * Saves meta data of a newly created file.
+   * @param fullFilePath - path of the file
+   * @param metadata - meta data to write
+   */
   private static void saveMetaData(String fullFilePath, String metadata) {
     try (PrintWriter out = new PrintWriter(fullFilePath)) {
       out.print(metadata);
@@ -125,5 +135,38 @@ public class LocalStorage {
     catch (FileNotFoundException e) {
       System.err.println("Could not find file: " + fullFilePath);
     }
+  }
+  
+  /**
+   * Returns the stored meta data information of a file.
+   * 
+   * @param filePathString
+   *          - path of the file.
+   * @return File meta data.
+   */
+  public static FileModel getMetaData(String filePathString) {
+    String fullFilePath = FILE_PATH + "/" + filePathString + META_DATA_SUFFIX;
+    
+    FileModel result = null;
+    try (BufferedReader br = new BufferedReader(new FileReader(fullFilePath))) {
+      String line = br.readLine();
+      result = JsonConverter.getObjectFromJson(line, FileModel.class);
+    } catch (IOException e) {
+      System.err.println("Could not find file: " + fullFilePath);
+    }
+    
+    // Create Path
+    java.nio.file.Path filePath = FileSystems.getDefault().getPath(FILE_PATH,
+        filePathString);
+
+    // TODO: Extract this as a method...
+    // Split the file name from the path
+    String name = filePath.getFileName().toString();
+    String path = filePathString.substring(0, filePathString.length() - name.length());
+    
+    result.name = name;
+    result.path = path;
+    
+    return result;
   }
 }

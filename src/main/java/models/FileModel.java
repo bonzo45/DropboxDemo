@@ -80,12 +80,12 @@ public class FileModel implements BasicFileAttributes {
     result += "\"creationTime\": \"" + creationTime + "\",";
     result += "\"lastAccessTime\": \"" + lastAccessTime + "\",";
     result += "\"lastModifiedTime\": \"" + lastModifiedTime + "\",";
-    result += "\"isDirectory\": \"" + isDirectory + "\",";
-    result += "\"isOther\": \"" + isOther + "\",";
-    result += "\"isRegularFile\": \"" + isRegularFile + "\",";
-    result += "\"isSymbolicLink\": \"" + isSymbolicLink + "\",";
+    result += "\"isDirectory\": " + isDirectory + ",";
+    result += "\"isOther\": " + isOther + ",";
+    result += "\"isRegularFile\": " + isRegularFile + ",";
+    result += "\"isSymbolicLink\": " + isSymbolicLink + ",";
     result += "\"size\": \"" + size + "\",";
-    result += "\"isInDropbox\": \"" + isInDropbox + "\",";
+    result += "\"isInDropbox\": " + isInDropbox + ",";
     result += "\"dropboxPath\": \"" + dropboxPath + "\"";
     return "{" + result + "}";
   }

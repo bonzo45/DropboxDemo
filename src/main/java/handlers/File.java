@@ -17,6 +17,6 @@ public class File {
   @Produces(MediaType.APPLICATION_JSON)
   public String getFile(@PathParam("file_name") String fileName) {
     System.err.println("File Information: " + fileName);
-    return LocalStorage.getFile(fileName).toJSON();
+    return LocalStorage.getMetaData(fileName).toJSON();
   }
 }

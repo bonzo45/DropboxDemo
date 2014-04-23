@@ -3,52 +3,97 @@
 <head>
   <meta charset="UTF-8">
   <link rel="stylesheet" type="text/css" href="styles.css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
   <script src="lib/underscore-min.js"></script>
   <script src="lib/backbone-min.js"></script>
   <script src="lib/dropbox-handler.js"></script>
   
-  <script type='text/template' id='todo-template'>
+  <script type='text/template' id='directory-template'>
+    <table>
+      <tr>
+
+        <th>
+        
+        </th>
+
+        <th>
+          <i class="fa fa-dropbox"></i>
+        </th>
+
+        <th>
+          Name
+        </th>
+
+        <th>
+          Size
+        </th>
+
+        <th>
+          Modified
+        </th>
+
+        <th>
+          Dropbox Path
+        </th>
+      </tr>
+
+      <%= stuff %>
+
+    </table>
+  </script>  
+  
+  <script type='text/template' id='file-template'>
     <tr>
+      <td>
+        <% 
+        if (isDirectory) {
+            print('<i class="fa fa-folder"></i>')
+        }
+        else if (isRegularFile) {
+           print('<i class="fa fa-file"></i>')
+        }        
+        else {
+            print('<i class="fa fa-question-circle"></i>')
+        } 
+        %>
+      </td>
+
+      <td>
+        <% 
+        if (isInDropbox) {
+          print('<i class="fa fa-dropbox yes"></i>');
+        }
+        else {
+          print('<i class="fa fa-dropbox no"></i> ');
+        }
+        %>
+      </td>
+
       <td>
         <%= name %>
       </td>
-      <td>
-        <%= path %>
-      </td>
-      <td>
-        <%= creationTime %>
-      </td>
-      <td>
-        <%= lastAccessTime %>
-      </td>
-      <td>
-        <%= lastModifiedTime %>
-      </td>
-      <td>
-        <%= isDirectory %>
-      </td>
-      <td>
-        <%= isOther %>
-      </td>
-      <td>
-        <%= isRegularFile %>
-      </td>
-      <td>
-        <%= isSymbolicLink %>
-      </td>
+
       <td>
         <%= size %>
       </td>
+
       <td>
-        <%= isInDropbox %>
+        <%
+          var date = new Date(parseInt(lastModifiedTime));
+          print(date.getDate())
+          print("/")
+          print(date.getMonth() + 1)
+          print("/")
+          print(date.getFullYear())
+        %>
       </td>
+
       <td>
         <%= dropboxPath %>
       </td>
     </tr>
   </script>
-  
   
   <script src="lib/model/FileModel.js"></script>
   <script src="lib/collection/DirectoryCollection.js"></script>

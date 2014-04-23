@@ -2,6 +2,8 @@ var DirectoryView = Backbone.View.extend({
   // HTML/CSS
   tagName: 'div',
   className: 'todoList',
+  
+  template: $("#directory-template").html(),
 
   // Model
   files: [],
@@ -20,18 +22,22 @@ var DirectoryView = Backbone.View.extend({
 
   // Display the folder
   render: function() {
-    this.$el.html("<tr><th>Name</th><th>Path</th><th>...</th>");
-	  
+	var compiledTemplate = _.template(this.template);
+	var contents = "";
+	
 	// For each of the files in the folder
     this.collection.models.forEach(function(fileModel) {
     	// Create a view for it
     	newView = new FileView(fileModel);
     	
     	// Append it
-    	this.$el.append(newView.render());
+    	contents += newView.render().outerHTML;
     }, this);
 
-    this.$el.html("<table>" + this.$el.html() + "</table>");
+    var data = {stuff: contents};
+	var html = compiledTemplate(data);
+	
+    this.$el.html(html);
     return this.el;
   }
 });

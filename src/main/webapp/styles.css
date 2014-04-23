@@ -44,6 +44,32 @@ h1 {
 	text-align: left;
 }
 
-table, th, td {
-  border:1px solid grey;
+table {
+	width: 100%;
 }
+
+th {
+	font-size: 12pt;
+}
+
+td {
+	font-size: 10pt;
+	text-align: left;
+}
+
+.fa-folder {
+	color: #CC7A00;
+}
+
+.fa-file {
+	color: #009933;
+}
+
+.fa-dropbox.yes {
+	color: #007ee5;
+}
+
+.fa-dropbox.no {
+	color: grey;
+}
+
