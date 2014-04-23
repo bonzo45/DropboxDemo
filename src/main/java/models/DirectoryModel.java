@@ -21,7 +21,7 @@ public class DirectoryModel {
       result += file.toJSON();
       result += ",";
     }
-    return "{" + "\"files\": [" + result.substring(0, result.length() - 1) + "]}";
+    return "[" + result.substring(0, result.length() - 1) + "]";
   }
   
 }
