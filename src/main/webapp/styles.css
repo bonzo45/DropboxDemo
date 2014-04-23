@@ -43,3 +43,7 @@ h1 {
 	font-size: 30pt;
 	text-align: left;
 }
+
+table, th, td {
+  border:1px solid grey;
+}

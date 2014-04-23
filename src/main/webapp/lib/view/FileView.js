@@ -1,7 +1,6 @@
 var FileView = Backbone.View.extend({
 	// Put this view in the directory div
-	el : "#directory",
-	tagName : "div",
+	tagName : "tr",
 
 	// The template can be found here
 	template: $("#todo-template").html(),

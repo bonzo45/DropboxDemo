@@ -10,51 +10,53 @@
   
   <script type='text/template' id='todo-template'>
     <tr>
-      <th>
+      <td>
         <%= name %>
-      </th>
-      <th>
+      </td>
+      <td>
         <%= path %>
-      </th>
-      <th>
+      </td>
+      <td>
         <%= creationTime %>
-      </th>
-      <th>
+      </td>
+      <td>
         <%= lastAccessTime %>
-      </th>
-      <th>
+      </td>
+      <td>
         <%= lastModifiedTime %>
-      </th>
-      <th>
+      </td>
+      <td>
         <%= isDirectory %>
-      </th>
-      <th>
+      </td>
+      <td>
         <%= isOther %>
-      </th>
-      <th>
+      </td>
+      <td>
         <%= isRegularFile %>
-      </th>
-      <th>
+      </td>
+      <td>
         <%= isSymbolicLink %>
-      </th>
-      <th>
+      </td>
+      <td>
         <%= size %>
-      </th>
-      <th>
+      </td>
+      <td>
         <%= isInDropbox %>
-      </th>
-      <th>
+      </td>
+      <td>
         <%= dropboxPath %>
-      </th>
+      </td>
     </tr>
   </script>
   
   
   <script src="lib/model/FileModel.js"></script>
+  <script src="lib/collection/DirectoryCollection.js"></script>
   <script src="lib/view/FileView.js"></script>
+  <script src="lib/view/DirectoryView.js"></script>
   <script>
     function init() {
-      // Create a model for one file
+      /* // Create a model for one file
     	walle = new FileModel({
     	  id: 'walle.wav'
       });
@@ -63,7 +65,14 @@
       walleView = new FileView(walle);
       
       // Pull the data from the server to the model
-      walle.fetch();
+      walle.fetch(); */
+      
+      rootDirectory = new DirectoryCollection();
+      rootDirectoryView = new DirectoryView(rootDirectory);
+      rootDirectoryView.setElement("#directory");
+      rootDirectoryView.render();
+      
+      rootDirectory.fetch({reset: true});
     }
   </script>
   
