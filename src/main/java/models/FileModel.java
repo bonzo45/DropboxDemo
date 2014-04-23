@@ -84,8 +84,8 @@ public class FileModel implements BasicFileAttributes {
     result += "\"isOther\": \"" + isOther + "\",";
     result += "\"isRegularFile\": \"" + isRegularFile + "\",";
     result += "\"isSymbolicLink\": \"" + isSymbolicLink + "\",";
-    result += "\"size\": \"" + size + "\"";
-    result += "\"isInDropbox\": \"" + isInDropbox + "\"";
+    result += "\"size\": \"" + size + "\",";
+    result += "\"isInDropbox\": \"" + isInDropbox + "\",";
     result += "\"dropboxPath\": \"" + dropboxPath + "\"";
     return "{" + result + "}";
   }
