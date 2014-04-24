@@ -12,7 +12,7 @@ var FileView = Backbone.View.extend({
 	},
 
 	events : {
-		'click' : 'render'
+		'click' : 'uploadToDropbox'
 	},
 
 	// Rendering simply applies the template
@@ -22,5 +22,14 @@ var FileView = Backbone.View.extend({
 		var html = compiledTemplate(data);
 		this.$el.html(html);
 		return this.el;
+	},
+	
+	uploadToDropbox: function() {
+		var accessToken = $("#access_token").val();
+		var urlToContact = "dropbox/sync/" + this.model.get('path') + this.model.get('name') + "?access_token=" + accessToken;
+		$.ajax({
+			type: "PUT",
+			url: urlToContact
+		});
 	}
 });

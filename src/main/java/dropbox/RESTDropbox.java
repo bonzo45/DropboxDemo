@@ -1,5 +1,9 @@
 package dropbox;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Locale;
 
 import com.dropbox.core.DbxAccountInfo;
@@ -10,6 +14,9 @@ import com.dropbox.core.DbxEntry;
 import com.dropbox.core.DbxException;
 import com.dropbox.core.DbxRequestConfig;
 import com.dropbox.core.DbxWebAuthNoRedirect;
+import com.dropbox.core.DbxWriteMode;
+
+import storage.LocalStorage;
 
 public class RESTDropbox {
 
@@ -34,6 +41,11 @@ public class RESTDropbox {
         .getDefault().toString());    
   }
 
+  public RESTDropbox(String accessToken) {
+    this();
+    setupClient(accessToken);
+  }
+  
   /**
    * Retrieve the link users authorise the app with.
    * 
@@ -76,14 +88,10 @@ public class RESTDropbox {
   }
 
   /**
-   * Gets the account details, given an access token.
-   * 
-   * @param accessToken
-   *          - token allowing access to account.
+   * Gets the account details.
    * @return The account details.
    */
-  public DbxAccountInfo getAccountDetails(String accessToken) {
-    setupClient(accessToken);
+  public DbxAccountInfo getAccountDetails() {
     DbxAccountInfo info = null;
     try {
       info = client.getAccountInfo();
@@ -94,6 +102,12 @@ public class RESTDropbox {
     return info;
   }
 
+  /**
+   * UNUSED - Returns dropbox directory information.
+   * @param accessToken
+   * @param directory
+   * @return
+   */
   public DbxEntry.WithChildren getDirectory(String accessToken, String directory) {
     setupClient(accessToken);
     
@@ -108,4 +122,38 @@ public class RESTDropbox {
     return listing;
   }
   
+  /**
+   * Uploads a file to Dropbox.
+   * @param source - source file path e.g. "/home/user/image.jpg"
+   * @param dest - destination file path e.g. "/images/image.jpg"
+   * @return 
+   */
+  public void upload(String source, String dest) {
+    System.err.println("Uploading " + source + " to " + dest);
+    
+    // Attempt to open file
+    File inputFile = LocalStorage.getActualFile(source);
+    try (FileInputStream inputStream = new FileInputStream(inputFile)) {
+      // Attempt to upload file
+      client.uploadFile(
+          dest,
+          DbxWriteMode.add(), //                          <-- Renames the file to (1) if it exists...
+          //DbxWriteMode.force()                          <-- Blasts the file and starts again...
+          //DbxWriteMode.update(String revisionToReplace) <-- Updates the file, produces conflicted copy if changed since last pull...
+          inputFile.length(),
+          inputStream
+      );
+      System.err.println("Upload Successful");
+      LocalStorage.setInDropbox(source, dest);
+    
+    } catch (FileNotFoundException e) {
+      System.err.println("File not found: " + source);
+    } catch (SecurityException e) {
+      System.err.println("Permission denied: " + source);
+    } catch (DbxException e) {
+      System.err.println("Upload Error: Dropbox returned an error.");
+    } catch (IOException e) {
+      System.err.println("Upload Error: Could not read file.");
+    }
+  }
 }

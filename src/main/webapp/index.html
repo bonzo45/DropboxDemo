@@ -8,43 +8,8 @@
   <script src="lib/underscore-min.js"></script>
   <script src="lib/backbone-min.js"></script>
   <script src="lib/dropbox-handler.js"></script>
-  
-  <script type='text/template' id='directory-template'>
-    <table>
-      <tr>
 
-        <th>
-        
-        </th>
-
-        <th>
-          <i class="fa fa-dropbox"></i>
-        </th>
-
-        <th>
-          Name
-        </th>
-
-        <th>
-          Size
-        </th>
-
-        <th>
-          Modified
-        </th>
-
-        <th>
-          Dropbox Path
-        </th>
-      </tr>
-
-      <%= stuff %>
-
-    </table>
-  </script>  
-  
   <script type='text/template' id='file-template'>
-    <tr>
       <td>
         <% 
         if (directory) {
@@ -92,7 +57,6 @@
       <td>
         <%= dropboxPath %>
       </td>
-    </tr>
   </script>
   
   <script src="lib/model/FileModel.js"></script>
@@ -101,30 +65,20 @@
   <script src="lib/view/DirectoryView.js"></script>
   <script>
     function init() {
-      /* // Create a model for one file
-    	walle = new FileModel({
-    	  id: 'walle.wav'
-      });
-      
-      // Create a view to display it
-      walleView = new FileView(walle);
-      
-      // Pull the data from the server to the model
-      walle.fetch(); */
-      
       rootDirectory = new DirectoryCollection();
       rootDirectoryView = new DirectoryView(rootDirectory);
       rootDirectoryView.setElement("#directory");
       rootDirectoryView.render();
-      
       rootDirectory.fetch({reset: true});
     }
   </script>
   
-  <title>Title</title>
+  <title>Sam's Incredible Demonstration</title>
 </head>
 <body onload="init()">
+  
   <h1>Sam's Dropbox Demo</h1>
+  
   <div class="instructions">First time? Visit the link below and copy the authorisation code here.</div>
   <div id="authorisation_link" class="url">insert link here...</div>
   <form id="new_user_authentication" onSubmit="return getAccessToken()">
@@ -140,12 +94,19 @@
   
   <hr>
   
+  <div class="instructions">Your Account</div>
   <div id="account_details">
   </div>
   
-  <div id="directory">
-  </div>
+  <hr>
   
+  <div class="instructions">Files on Server</div>
+  <table id="directory">
+  </table>
+  
+  <hr>
+  
+  <div class="instructions">Upload a File</div>
   <form id="upload_file" action="dropbox/upload" method="post" enctype="multipart/form-data">
     <input type="file" name="file"></input>
     <input type="submit" name="done">

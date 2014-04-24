@@ -183,4 +183,21 @@ public class LocalStorage {
     String name = path.getFileName().toString();
     return filePath.substring(0, filePath.length() - name.length());
   }
+
+  /**
+   * Returns the File object corresponding to the path.
+   * @param filePath - relative path of the file.
+   * @return
+   */
+  public static File getActualFile(String filePath) {
+    return new File(FILE_PATH + "/" + filePath);
+  }
+
+  public static void setInDropbox(String source, String dest) {
+    FileModel originalData = getMetaData(source);
+    originalData.setInDropbox(true);
+    originalData.setDropboxPath(dest);
+    saveMetaData(FILE_PATH + "/" + source + META_DATA_SUFFIX, JsonConverter.getJSONString(originalData));
+  }
+  
 }

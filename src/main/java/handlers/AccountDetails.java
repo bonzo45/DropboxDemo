@@ -19,8 +19,8 @@ public class AccountDetails {
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public String getAccountDetails(@QueryParam("access_token") String accessToken) {
-    RESTDropbox dropbox = new RESTDropbox();
-    DbxAccountInfo info = dropbox.getAccountDetails(accessToken);
+    RESTDropbox dropbox = new RESTDropbox(accessToken);
+    DbxAccountInfo info = dropbox.getAccountDetails();
     String result = "";
     result += "\"name\": \"" + info.displayName + "\",";
     result += "\"country\": \"" + info.country + "\",";
