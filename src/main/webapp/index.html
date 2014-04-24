@@ -68,7 +68,10 @@
   <script src="lib/view/DirectoryView.js"></script>
 	<script>
 		function init() {
-			/* Insert Dropbox 'chooser' */
+			/* Display the Authorisation Link (for new users) */
+			getAuthorisationLink();
+			
+			/* Insert Dropbox 'chooser' (for pulling files from Dropbox) */
 			options = {
 				success : function(files) {
 					var regex = /https:\/\/dl.dropboxusercontent.com\/1\/view\/([^\/]*)\/(.*)/;
@@ -76,23 +79,15 @@
 					alert("I think your path is: " + matches[2]);
 				},
 	
-				// Optional. Called when the user closes the dialog without selecting a file
-				// and does not include any parameters.
-				cancel : function() {
-	
-				},
-	
-				// Optional. "preview" (default) is a preview link to the document for sharing,
-				// "direct" is an expiring link to download the contents of the file. For more
-				// information about link types, see Link types below.
-				linkType : "direct", // or "direct"
+				linkType : "direct",
 				
+				// TODO: Allow many files to be pulled at once.
 				multiselect : false
 			};
 			var button = Dropbox.createChooseButton(options);
 			document.getElementById("dropbox_chooser").appendChild(button);
 	
-			/* Read Files from Server */
+			/* Show files currently on the server */
 			rootDirectory = new DirectoryCollection();
 			rootDirectoryView = new DirectoryView(rootDirectory);
 			rootDirectoryView.setElement("#directory");

@@ -1,5 +1,3 @@
-getAuthorisationLink();
-
 function getAuthorisationLink() {
   $.getJSON("dropbox/auth_link", function(data) {
     $("#authorisation_link").html(
