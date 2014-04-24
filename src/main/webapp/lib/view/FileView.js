@@ -26,7 +26,7 @@ var FileView = Backbone.View.extend({
 	
 	uploadToDropbox: function() {
 		var accessToken = $("#access_token").val();
-		var urlToContact = "dropbox/sync/" + this.model.get('path') + this.model.get('name') + "?access_token=" + accessToken;
+		var urlToContact = "dropbox/files/" + this.model.get('path') + this.model.get('name') + "/to_dropbox" + "?access_token=" + accessToken;
 		$.ajax({
 			type: "PUT",
 			url: urlToContact

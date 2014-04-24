@@ -24,7 +24,7 @@ function getAccountDetails() {
     "access_token" : access_token
   }, function(data) {
     var account_details_div = $("#account_details");
-    account_details_div.html(data.user_id + " - " + data.name + "(" + data.country + ")");
+    account_details_div.html(data.user_id + " - " + data.name + " (" + data.country + ")");
   });
   
   return false;
