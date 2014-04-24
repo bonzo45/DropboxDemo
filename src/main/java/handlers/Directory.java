@@ -11,7 +11,7 @@ import storage.LocalStorage;
 @Path("/directory")
 public class Directory {
 
-  // Returns the persistent access token
+  // Returns all the files in a directory
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   public String getFiles(@PathParam("directory") String directory) {

@@ -14,7 +14,6 @@ public class DemoApplication extends Application {
       final Set<Class<?>> classes = new HashSet<Class<?>>();
       // Let (maybe the web server)? know that we support multi-part things...
       classes.add(MultiPartFeature.class);
-      // classes.add(MultiPart.class);
       classes.add(LoggingFilter.class);
       return classes;
   }
