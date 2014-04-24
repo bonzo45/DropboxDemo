@@ -21,6 +21,11 @@ public class DirectoryModel {
       result += file.toJSON();
       result += ",";
     }
+    
+    if (result.equals("")) {
+      return "[]";
+    }
+    
     return "[" + result.substring(0, result.length() - 1) + "]";
   }
   

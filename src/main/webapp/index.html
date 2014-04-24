@@ -47,10 +47,10 @@
     <tr>
       <td>
         <% 
-        if (isDirectory) {
+        if (directory) {
             print('<i class="fa fa-folder"></i>')
         }
-        else if (isRegularFile) {
+        else if (regularFile) {
            print('<i class="fa fa-file"></i>')
         }        
         else {
@@ -61,7 +61,7 @@
 
       <td>
         <% 
-        if (isInDropbox) {
+        if (inDropbox) {
           print('<i class="fa fa-dropbox yes"></i>');
         }
         else {
@@ -146,7 +146,7 @@
   <div id="directory">
   </div>
   
-  <form id="upload_file" action="dropbox/files" method="post" enctype="multipart/form-data">
+  <form id="upload_file" action="dropbox/upload" method="post" enctype="multipart/form-data">
     <input type="file" name="file"></input>
     <input type="submit" name="done">
   </form>

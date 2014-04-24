@@ -9,22 +9,22 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class FileModel implements BasicFileAttributes {
 
   /* Name and Path */
-  public String name;
-  public String path;
+  private String name;
+  private String path;
 
   /* Standard BasicFileAttributes Fields */
-  public long creationTime;
-  public long lastAccessTime;
-  public long lastModifiedTime;
-  public boolean isDirectory;
-  public boolean isOther;
-  public boolean isRegularFile;
-  public boolean isSymbolicLink;
-  public long size;
+  private long creationTime;
+  private long lastAccessTime;
+  private long lastModifiedTime;
+  private boolean directory;
+  private boolean other;
+  private boolean regularFile;
+  private boolean symbolicLink;
+  private long size;
 
   /* Dropbox Fields */
-  public boolean isInDropbox;
-  public String dropboxPath;
+  private boolean inDropbox;
+  private String dropboxPath;
 
   public FileModel(String name, String path, BasicFileAttributes attr) {
     this.name = name;
@@ -33,13 +33,14 @@ public class FileModel implements BasicFileAttributes {
     creationTime = attr.creationTime().toMillis();
     lastAccessTime = attr.lastAccessTime().toMillis();
     lastModifiedTime = attr.lastModifiedTime().toMillis();
-    isDirectory = attr.isDirectory();
-    isOther = attr.isOther();
-    isRegularFile = attr.isRegularFile();
-    isSymbolicLink = attr.isSymbolicLink();
+    directory = attr.isDirectory();
+    other = attr.isOther();
+    regularFile = attr.isRegularFile();
+    symbolicLink = attr.isSymbolicLink();
     size = attr.size();
 
-    isInDropbox = false;
+    // Assume the file is not in Dropbox
+    inDropbox = false;
     dropboxPath = "";
   }
 
@@ -49,27 +50,25 @@ public class FileModel implements BasicFileAttributes {
 
   @JsonCreator
   public FileModel(
-      @JsonProperty("name") String name,
-      @JsonProperty("path") String path,
       @JsonProperty("creationTime") long creationTime,
       @JsonProperty("lastAccessTime") long lastAccessTime,
       @JsonProperty("lastModifiedTime") long lastModifiedTime,
-      @JsonProperty("isDirectory") boolean isDirectory,
-      @JsonProperty("isOther") boolean isOther,
-      @JsonProperty("isRegularFile") boolean isRegularFile,
-      @JsonProperty("isSymbolicLink") boolean isSymbolicLink,
+      @JsonProperty("directory") boolean directory,
+      @JsonProperty("other") boolean other,
+      @JsonProperty("regularFile") boolean regularFile,
+      @JsonProperty("symbolicLink") boolean symbolicLink,
       @JsonProperty("size") long size,
-      @JsonProperty("isInDropbox") boolean isInDropbox,
+      @JsonProperty("inDropbox") boolean inDropbox,
       @JsonProperty("dropboxPath") String dropboxPath) {
     this.creationTime = creationTime;
     this.lastAccessTime = lastAccessTime;
     this.lastModifiedTime = lastModifiedTime;
-    this.isDirectory = isDirectory;
-    this.isOther = isOther;
-    this.isRegularFile = isRegularFile;
-    this.isSymbolicLink = isSymbolicLink;
+    this.directory = directory;
+    this.other = other;
+    this.regularFile = regularFile;
+    this.symbolicLink = symbolicLink;
     this.size = size;
-    this.isInDropbox = isInDropbox;
+    this.inDropbox = inDropbox;
     this.dropboxPath = dropboxPath;
   }
 
@@ -80,16 +79,17 @@ public class FileModel implements BasicFileAttributes {
     result += "\"creationTime\": \"" + creationTime + "\",";
     result += "\"lastAccessTime\": \"" + lastAccessTime + "\",";
     result += "\"lastModifiedTime\": \"" + lastModifiedTime + "\",";
-    result += "\"isDirectory\": " + isDirectory + ",";
-    result += "\"isOther\": " + isOther + ",";
-    result += "\"isRegularFile\": " + isRegularFile + ",";
-    result += "\"isSymbolicLink\": " + isSymbolicLink + ",";
+    result += "\"directory\": " + directory + ",";
+    result += "\"other\": " + other + ",";
+    result += "\"regularFile\": " + regularFile + ",";
+    result += "\"symbolicLink\": " + symbolicLink + ",";
     result += "\"size\": \"" + size + "\",";
-    result += "\"isInDropbox\": " + isInDropbox + ",";
+    result += "\"inDropbox\": " + inDropbox + ",";
     result += "\"dropboxPath\": \"" + dropboxPath + "\"";
     return "{" + result + "}";
   }
 
+  /* Methods Required to implement BasicFileAttributes */
   @Override
   public FileTime lastModifiedTime() {
     return FileTime.fromMillis(lastModifiedTime);
@@ -107,22 +107,22 @@ public class FileModel implements BasicFileAttributes {
 
   @Override
   public boolean isRegularFile() {
-    return isRegularFile;
+    return regularFile;
   }
 
   @Override
   public boolean isDirectory() {
-    return isDirectory;
+    return directory;
   }
 
   @Override
   public boolean isSymbolicLink() {
-    return isSymbolicLink;
+    return symbolicLink;
   }
 
   @Override
   public boolean isOther() {
-    return isOther;
+    return other;
   }
 
   @Override
@@ -135,15 +135,22 @@ public class FileModel implements BasicFileAttributes {
     return null;
   }
 
-  public boolean isInDropbox() {
-    return isInDropbox;
+    /* Getters and Setters (for Jackson) */
+  public String getName() {
+    return name;
   }
 
-  public String dropboxPath() {
-    return dropboxPath;
+  public void setName(String name) {
+    this.name = name;
   }
 
-  /* Getters and Setters (for Jackson) */
+  public String getPath() {
+    return path;
+  }
+
+  public void setPath(String path) {
+    this.path = path;
+  }
 
   public long getCreationTime() {
     return creationTime;
@@ -177,6 +184,14 @@ public class FileModel implements BasicFileAttributes {
     this.size = size;
   }
 
+  public boolean isInDropbox() {
+    return inDropbox;
+  }
+
+  public void setInDropbox(boolean inDropbox) {
+    this.inDropbox = inDropbox;
+  }
+
   public String getDropboxPath() {
     return dropboxPath;
   }
@@ -185,24 +200,20 @@ public class FileModel implements BasicFileAttributes {
     this.dropboxPath = dropboxPath;
   }
 
-  public void setDirectory(boolean isDirectory) {
-    this.isDirectory = isDirectory;
+  public void setDirectory(boolean directory) {
+    this.directory = directory;
   }
 
-  public void setOther(boolean isOther) {
-    this.isOther = isOther;
+  public void setOther(boolean other) {
+    this.other = other;
   }
 
-  public void setRegularFile(boolean isRegularFile) {
-    this.isRegularFile = isRegularFile;
+  public void setRegularFile(boolean regularFile) {
+    this.regularFile = regularFile;
   }
 
-  public void setSymbolicLink(boolean isSymbolicLink) {
-    this.isSymbolicLink = isSymbolicLink;
-  }
-
-  public void setInDropbox(boolean isInDropbox) {
-    this.isInDropbox = isInDropbox;
+  public void setSymbolicLink(boolean symbolicLink) {
+    this.symbolicLink = symbolicLink;
   }
 
 }

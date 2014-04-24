@@ -24,7 +24,8 @@ public class LocalStorage {
   private static final String META_DATA_SUFFIX = ".meta";
 
   /**
-   * Returns information about a specified file.
+   * Returns information about a specified file. Information taken from the file
+   * itself, not the metadata file accompanying it.
    * 
    * @param filePathString
    *          - path of the file.
@@ -32,21 +33,23 @@ public class LocalStorage {
    */
   private static FileModel getFile(String filePathString) {
     // Create Path
-    java.nio.file.Path filePath = FileSystems.getDefault().getPath(FILE_PATH,
-        filePathString);
+    java.nio.file.Path filePath = 
+        FileSystems.getDefault().getPath(FILE_PATH, filePathString);
 
-    // Try to read attributes from the file itself.
+    // Try to read attributes from the file.
     BasicFileAttributes attr;
     try {
       attr = Files.readAttributes(filePath, BasicFileAttributes.class);
     } catch (IOException e) {
+      System.err.println("Could not read attributes from file: " + filePathString);
       return new FileModel();
     }
-    
+
     // Split the file name from the path
-    String name = filePath.getFileName().toString();
-    String path = filePathString.substring(0, filePathString.length() - name.length());
-    
+    String name = getFileName(filePathString);
+    String path = getFilePath(filePathString);
+
+    // Create a new model with all of this information.
     return new models.FileModel(name, path, attr);
   }
 
@@ -58,6 +61,7 @@ public class LocalStorage {
    * @return Directory information.
    */
   public static DirectoryModel getDirectory(String directoryPath) {
+    // Set up the directory as a 'File'
     java.io.File folder = new java.io.File("/Users/Sam/files" + directoryPath);
     java.io.File[] listOfFiles = folder.listFiles();
 
@@ -125,20 +129,22 @@ public class LocalStorage {
 
   /**
    * Saves meta data of a newly created file.
-   * @param fullFilePath - path of the file
-   * @param metadata - meta data to write
+   * 
+   * @param fullFilePath
+   *          - path of the file
+   * @param metadata
+   *          - meta data to write
    */
   private static void saveMetaData(String fullFilePath, String metadata) {
     try (PrintWriter out = new PrintWriter(fullFilePath)) {
       out.print(metadata);
-    }
-    catch (FileNotFoundException e) {
+    } catch (FileNotFoundException e) {
       System.err.println("Could not find file: " + fullFilePath);
     }
   }
-  
+
   /**
-   * Returns the stored meta data information of a file.
+   * Returns the stored meta data of a file.
    * 
    * @param filePathString
    *          - path of the file.
@@ -146,7 +152,7 @@ public class LocalStorage {
    */
   public static FileModel getMetaData(String filePathString) {
     String fullFilePath = FILE_PATH + "/" + filePathString + META_DATA_SUFFIX;
-    
+
     FileModel result = null;
     try (BufferedReader br = new BufferedReader(new FileReader(fullFilePath))) {
       String line = br.readLine();
@@ -154,19 +160,27 @@ public class LocalStorage {
     } catch (IOException e) {
       System.err.println("Could not find file: " + fullFilePath);
     }
-    
-    // Create Path
-    java.nio.file.Path filePath = FileSystems.getDefault().getPath(FILE_PATH,
-        filePathString);
 
-    // TODO: Extract this as a method...
-    // Split the file name from the path
-    String name = filePath.getFileName().toString();
-    String path = filePathString.substring(0, filePathString.length() - name.length());
-    
-    result.name = name;
-    result.path = path;
-    
+    result.setName(getFileName(filePathString));
+    result.setPath(getFilePath(filePathString));
+
     return result;
+  }
+
+  private static String getFileName(String filePath) {
+    // Create Path
+    java.nio.file.Path path = FileSystems.getDefault().getPath(FILE_PATH,
+        filePath);
+
+    return path.getFileName().toString();
+  }
+
+  private static String getFilePath(String filePath) {
+    // Create Path
+    java.nio.file.Path path = FileSystems.getDefault().getPath(FILE_PATH,
+        filePath);
+
+    String name = path.getFileName().toString();
+    return filePath.substring(0, filePath.length() - name.length());
   }
 }
