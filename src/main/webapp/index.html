@@ -9,6 +9,9 @@
   <script src="lib/backbone-min.js"></script>
   <script src="lib/dropbox-handler.js"></script>
 
+  <!-- Dropbox Chooser -->
+  <script type="text/javascript" src="https://www.dropbox.com/static/api/2/dropins.js" id="dropboxjs" data-app-key="ar4df9h55qh7t6j"></script>
+
   <script type='text/template' id='file-template'>
       <td>
         <% 
@@ -63,21 +66,48 @@
   <script src="lib/collection/DirectoryCollection.js"></script>
   <script src="lib/view/FileView.js"></script>
   <script src="lib/view/DirectoryView.js"></script>
-  <script>
-    function init() {
-      rootDirectory = new DirectoryCollection();
-      rootDirectoryView = new DirectoryView(rootDirectory);
-      rootDirectoryView.setElement("#directory");
-      rootDirectoryView.render();
-      rootDirectory.fetch({reset: true});
-    }
-  </script>
-  
-  <title>Sam's Incredible Demonstration</title>
+	<script>
+		function init() {
+			/* Insert Dropbox 'chooser' */
+			options = {
+				success : function(files) {
+					var regex = /https:\/\/dl.dropboxusercontent.com\/1\/view\/([^\/]*)\/(.*)/;
+					var matches = regex.exec(files[0].link);
+					alert("I think your path is: " + matches[2]);
+				},
+	
+				// Optional. Called when the user closes the dialog without selecting a file
+				// and does not include any parameters.
+				cancel : function() {
+	
+				},
+	
+				// Optional. "preview" (default) is a preview link to the document for sharing,
+				// "direct" is an expiring link to download the contents of the file. For more
+				// information about link types, see Link types below.
+				linkType : "direct", // or "direct"
+				
+				multiselect : false
+			};
+			var button = Dropbox.createChooseButton(options);
+			document.getElementById("dropbox_chooser").appendChild(button);
+	
+			/* Read Files from Server */
+			rootDirectory = new DirectoryCollection();
+			rootDirectoryView = new DirectoryView(rootDirectory);
+			rootDirectoryView.setElement("#directory");
+			rootDirectoryView.render();
+			rootDirectory.fetch({
+				reset : true
+			});
+		}
+	</script>
+
+<title>Sam's Incredible Demonstration</title>
 </head>
 <body onload="init()">
   
-  <h1>Sam's Dropbox Demo</h1>
+  <h1>Sam's Incredible Demonstration</h1>
   
   <div class="instructions">First time? Visit the link below and copy the authorisation code here.</div>
   <div id="authorisation_link" class="url">insert link here...</div>
@@ -111,6 +141,9 @@
     <input type="file" name="file"></input>
     <input type="submit" name="done">
   </form>
+  
+  <div class="instructions">Pull from Dropbox</div>
+  <div id="dropbox_chooser"></div>
   
 </body>
 </html>
