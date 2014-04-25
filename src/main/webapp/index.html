@@ -107,6 +107,34 @@
 				reset : true
 			});
 		}
+		
+		// Asynchronous File Upload
+		function uploadFile() {
+			var formObj = $("#upload_file");
+			var fileObj = $("#upload_file_field");
+	    var filePath = $("#upload_file_field").val();
+	    var fileName = filePath.split("\\").pop();
+	    var formURL = "dropbox/files/" + fileName;
+	    var formData = new FormData();
+	    formData.append('file', fileObj[0].files[0]);
+	    $.ajax({
+	     url: formURL,
+	     type: 'POST',
+	     data:  formData,
+	     mimeType:"multipart/form-data",
+	     contentType: false,
+	     cache: false,
+	     processData:false,
+	     success: function(data, textStatus, jqXHR) {
+	    	 rootDirectory.fetch({reset: true});
+	     },
+	     error: function(jqXHR, textStatus, errorThrown) {
+	     
+	     }          
+	    });
+	    return false;
+		}
+
 	</script>
 
 <title>Sam's Incredible Demonstration</title>
@@ -143,8 +171,8 @@
   <hr>
   
   <div class="instructions">Upload a File</div>
-  <form id="upload_file" action="dropbox/upload" method="post" enctype="multipart/form-data">
-    <input type="file" name="file"></input>
+  <form id="upload_file" onSubmit="return uploadFile()" enctype="multipart/form-data">
+    <input id="upload_file_field" type="file" name="file"></input>
     <input type="submit" name="done">
   </form>
   
