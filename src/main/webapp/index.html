@@ -83,7 +83,10 @@
 					var urlToContact = "dropbox/files/" + files[0].name + "/from_dropbox" + "?access_token=" + accessToken;
 					$.ajax({
 			      type: "PUT",
-			      url: urlToContact
+			      url: urlToContact,
+			      complete: function() {
+			          rootDirectory.fetch({reset: true});
+			        }
 					})
 				},
 	

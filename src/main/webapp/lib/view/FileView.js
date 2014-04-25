@@ -29,7 +29,10 @@ var FileView = Backbone.View.extend({
 		var urlToContact = "dropbox/files/" + this.model.get('path') + this.model.get('name') + "/to_dropbox" + "?access_token=" + accessToken;
 		$.ajax({
 			type: "PUT",
-			url: urlToContact
+			url: urlToContact,
+			complete: function() {
+				rootDirectory.fetch({reset: true});
+			}
 		});
 	}
 });
