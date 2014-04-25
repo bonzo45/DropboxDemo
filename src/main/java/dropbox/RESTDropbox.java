@@ -7,6 +7,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Locale;
 
+import org.apache.log4j.Logger;
+
 import com.dropbox.core.DbxAccountInfo;
 import com.dropbox.core.DbxAppInfo;
 import com.dropbox.core.DbxAuthFinish;
@@ -21,6 +23,8 @@ import storage.LocalStorage;
 
 public class RESTDropbox {
 
+  public static Logger LOG = Logger.getLogger(RESTDropbox.class);
+  
   // Configuration
   private DbxAppInfo appInfo;
   private DbxRequestConfig config;
@@ -71,6 +75,7 @@ public class RESTDropbox {
     try {
       authFinish = webAuth.finish(authorisationCode);
     } catch (DbxException e) {
+      LOG.info("");
       System.err.println("Authorisation Failure: Dropbox reported an error.");
       return null;
     }
