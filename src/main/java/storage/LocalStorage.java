@@ -88,15 +88,7 @@ public class LocalStorage {
   public static void newFile(String filePathString, InputStream inputStream) {
     /* Write the file to disk */
     saveFile(FILE_PATH + "/" + filePathString, inputStream);
-
-    /* Gather information about file */
-    FileModel info = getFile(filePathString);
-
-    /* Create JSON representation of the metadata */
-    String jsonInfo = JsonConverter.getJSONString(info);
-
-    /* Store the metadata to a .meta file */
-    saveMetaData(FILE_PATH + "/" + filePathString + META_DATA_SUFFIX, jsonInfo);
+    generateFileMetaData(filePathString, false, "");
   }
 
   /**
@@ -198,6 +190,18 @@ public class LocalStorage {
     originalData.setInDropbox(true);
     originalData.setDropboxPath(dest);
     saveMetaData(FILE_PATH + "/" + source + META_DATA_SUFFIX, JsonConverter.getJSONString(originalData));
+  }
+
+  public static void generateFileMetaData(String filePath, boolean inDropbox, String source) {
+    /* Gather information about file */
+    FileModel info = getFile(filePath);
+    info.setInDropbox(inDropbox);
+    info.setDropboxPath(source);
+    /* Create JSON representation of the metadata */
+    String jsonInfo = JsonConverter.getJSONString(info);
+
+    /* Store the metadata to a .meta file */
+    saveMetaData(FILE_PATH + "/" + filePath + META_DATA_SUFFIX, jsonInfo);
   }
   
 }

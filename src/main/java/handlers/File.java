@@ -51,4 +51,13 @@ public class File {
     dropbox.upload(fileName, "/" + fileName);
     return Response.status(200).entity("Probably went alright...").build();
   }
+  
+  // Pulls a file from Dropbox
+  @PUT
+  @Path("from_dropbox")
+  public Response dropboxToServer(@QueryParam("access_token") String accessToken, @PathParam("file_name") String fileName) {
+    RESTDropbox dropbox = new RESTDropbox(accessToken);
+    dropbox.download("/" + fileName, fileName);
+    return Response.status(200).entity("Probably went alright...").build();
+  }
 }

@@ -3,6 +3,7 @@ package dropbox;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Locale;
 
@@ -126,7 +127,6 @@ public class RESTDropbox {
    * Uploads a file to Dropbox.
    * @param source - source file path e.g. "/home/user/image.jpg"
    * @param dest - destination file path e.g. "/images/image.jpg"
-   * @return 
    */
   public void upload(String source, String dest) {
     System.err.println("Uploading " + source + " to " + dest);
@@ -156,4 +156,48 @@ public class RESTDropbox {
       System.err.println("Upload Error: Could not read file.");
     }
   }
+
+  
+  /**
+   * Downloads a file from Dropbox
+   * @param source - source file path e.g. "/images/image.jpg"
+   * @param dest - destination file path e.g. "/home/user/image.jpg"
+   */
+  public void download(String source, String dest) {
+    System.out.println("Downloading " + source + " to " + dest);
+    // TODO: Remove this massive bodge.
+    // Try to open destination for writing
+    try (FileOutputStream outputStream = new FileOutputStream("/Users/Sam/Files/" + dest)){
+      client.getFile(source, null, outputStream);
+      System.out.println("Download Successful");
+      LocalStorage.generateFileMetaData(dest, true, source);
+    } catch (FileNotFoundException e) {
+      System.err.println("File not found: " + dest);
+    } catch (DbxException e) {
+      System.err.println("Download Error: Dropbox reported an error.");
+    } catch  (IOException e) {
+      System.err.println("Download Error: Could not read file.");
+    }
+    
+  }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
