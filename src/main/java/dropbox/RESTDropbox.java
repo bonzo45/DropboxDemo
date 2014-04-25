@@ -170,8 +170,6 @@ public class RESTDropbox {
    */
   public void download(String source, String dest) {
     System.out.println("Downloading " + source + " to " + dest);
-    // TODO: Remove this massive bodge.
-    // Try to open destination for writing
     try {
       OutputStream outputStream = LocalStorage.getFileOutputStream(dest);
       client.getFile(source, null, outputStream);

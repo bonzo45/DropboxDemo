@@ -77,8 +77,6 @@
 					var regex = /https:\/\/dl.dropboxusercontent.com\/1\/view\/([^\/]*)\/(.*)/;
 					var matches = regex.exec(files[0].link);
 					var path = matches[2];
-					alert("I think your path is: " + matches[2]);
-
 					var accessToken = $("#access_token").val();
 					var urlToContact = "dropbox/files/" + files[0].name + "/from_dropbox" + "?access_token=" + accessToken;
 					$.ajax({
