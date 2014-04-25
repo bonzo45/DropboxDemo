@@ -34,7 +34,7 @@ public class FileController {
   @Produces(MediaType.APPLICATION_JSON)
   public String getFile(@PathParam("file_path") String filePath) {
     System.err.println("File Information: " + filePath);
-    return JsonConverter.getJSONString(LocalStorage.getMetadata(filePath));
+    return JsonConverter.getJSONString(LocalStorage.getFile(filePath));
   }
 
   /**

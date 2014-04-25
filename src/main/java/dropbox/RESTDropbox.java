@@ -1,9 +1,8 @@
 package dropbox;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Locale;
 
@@ -138,15 +137,15 @@ public class RESTDropbox {
     System.err.println("Uploading " + source + " to " + dest);
 
     // Attempt to open file
-    File inputFile = LocalStorage.getActualFile(source);
-    try (FileInputStream inputStream = new FileInputStream(inputFile)) {
+    try {
+      InputStream inputStream = LocalStorage.getFileInputStream(source);
       // Attempt to upload file
       client.uploadFile(dest, DbxWriteMode.add(), 
           // "                    <-- Renames the file to (1) if it exists...
           // DbxWriteMode.force() <-- Blasts the file and starts again...
           // DbxWriteMode.update(String revisionToReplace) <-- Updates the file,
           // produces conflicted copy if changed since last pull...
-          inputFile.length(), inputStream);
+          -1, inputStream);
       System.err.println("Upload Successful");
       LocalStorage.setInDropbox(source, dest);
 
