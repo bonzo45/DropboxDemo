@@ -9,9 +9,15 @@ import javax.ws.rs.core.MediaType;
 import storage.LocalStorage;
 
 @Path("/directory")
-public class Directory {
+public class DirectoryController {
 
-  // Returns all the files in a directory
+  /**
+   * Returns JSON detailing all of the files in a directory.
+   * 
+   * @param directory
+   *          - path to the directory e.g. "images/directory1"
+   * @return
+   */
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   public String getFiles(@PathParam("directory") String directory) {

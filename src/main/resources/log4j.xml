@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<!DOCTYPE log4j:configuration PUBLIC
+  "-//APACHE//DTD LOG4J 1.2//EN" "http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/xml/doc-files/log4j.dtd">
 
 <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
-	
+
 	<appender name="console" class="org.apache.log4j.ConsoleAppender">
 		<param name="Target" value="System.out" />
 		<layout class="org.apache.log4j.PatternLayout">
@@ -11,7 +12,7 @@
 	</appender>
 
 	<appender name="FILE" class="org.apache.log4j.FileAppender">
-		<param name="File" value="/var/lib/tomcat6/logs/rnws.log" />
+		<param name="File" value="/Users/Sam/Documents/apache-tomcat-6.0.39/logs/log.txt" />
 		<param name="Append" value="true" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="%d{ISO8601} [%t] %-5p %c %x %M(..) - %m%n" />
@@ -20,7 +21,8 @@
 
 	<appender name="ROLL" class="org.apache.log4j.rolling.RollingFileAppender">
 		<rollingPolicy class="org.apache.log4j.rolling.TimeBasedRollingPolicy">
-			<param name="FileNamePattern" value="/var/lib/tomcat6/logs/rnws.%d{yyyy-MM-dd-HH_mm_ss_SSS}.log" />
+			<param name="FileNamePattern"
+				value="/var/lib/tomcat6/logs/rnws.%d{yyyy-MM-dd-HH_mm_ss_SSS}.log" />
 		</rollingPolicy>
 
 		<layout class="org.apache.log4j.PatternLayout">
@@ -30,9 +32,9 @@
 
 	<root>
 		<priority value="debug" />
-    <!-- 		<appender-ref ref="ROLL" /> -->
-		 <appender-ref ref="FILE" /> 
-		<!-- <appender-ref ref="console" />  -->
+		<!-- <appender-ref ref="ROLL" /> -->
+		<appender-ref ref="FILE" />
+		<!-- <appender-ref ref="console" /> -->
 	</root>
 
 </log4j:configuration>

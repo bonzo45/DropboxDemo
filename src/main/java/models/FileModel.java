@@ -26,6 +26,16 @@ public class FileModel implements BasicFileAttributes {
   private boolean inDropbox;
   private String dropboxPath;
 
+  /**
+   * Constructor for files that are not in Dropbox.
+   * 
+   * @param name
+   *          - name of the file.
+   * @param path
+   *          - path of the file.
+   * @param attr
+   *          - attributes retrieved from the file.
+   */
   public FileModel(String name, String path, BasicFileAttributes attr) {
     this.name = name;
     this.path = path;
@@ -44,13 +54,23 @@ public class FileModel implements BasicFileAttributes {
     dropboxPath = "";
   }
 
-  public FileModel() {
-
-  }
-
+  /**
+   * A constructor used by Jackson to create an object from a JSON
+   * representation.
+   * 
+   * @param creationTime
+   * @param lastAccessTime
+   * @param lastModifiedTime
+   * @param directory
+   * @param other
+   * @param regularFile
+   * @param symbolicLink
+   * @param size
+   * @param inDropbox
+   * @param dropboxPath
+   */
   @JsonCreator
-  public FileModel(
-      @JsonProperty("creationTime") long creationTime,
+  public FileModel(@JsonProperty("creationTime") long creationTime,
       @JsonProperty("lastAccessTime") long lastAccessTime,
       @JsonProperty("lastModifiedTime") long lastModifiedTime,
       @JsonProperty("directory") boolean directory,
@@ -70,23 +90,6 @@ public class FileModel implements BasicFileAttributes {
     this.size = size;
     this.inDropbox = inDropbox;
     this.dropboxPath = dropboxPath;
-  }
-
-  public String toJSON() {
-    String result = "";
-    result += "\"name\": \"" + name + "\",";
-    result += "\"path\": \"" + path + "\",";
-    result += "\"creationTime\": \"" + creationTime + "\",";
-    result += "\"lastAccessTime\": \"" + lastAccessTime + "\",";
-    result += "\"lastModifiedTime\": \"" + lastModifiedTime + "\",";
-    result += "\"directory\": " + directory + ",";
-    result += "\"other\": " + other + ",";
-    result += "\"regularFile\": " + regularFile + ",";
-    result += "\"symbolicLink\": " + symbolicLink + ",";
-    result += "\"size\": \"" + size + "\",";
-    result += "\"inDropbox\": " + inDropbox + ",";
-    result += "\"dropboxPath\": \"" + dropboxPath + "\"";
-    return "{" + result + "}";
   }
 
   /* Methods Required to implement BasicFileAttributes */
@@ -135,7 +138,7 @@ public class FileModel implements BasicFileAttributes {
     return null;
   }
 
-    /* Getters and Setters (for Jackson) */
+  /* Getters and Setters (for Jackson) */
   public String getName() {
     return name;
   }
