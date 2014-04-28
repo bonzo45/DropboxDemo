@@ -37,11 +37,18 @@
 			<version>2.3.3</version>
 		</dependency>
 
-    <!-- Logging -->
+		<!-- Logging -->
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 			<version>1.2.17</version>
+		</dependency>
+
+		<!-- Apache Commons (Needed for generating CSRF Token) -->
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.9</version>
 		</dependency>
 
 	</dependencies>

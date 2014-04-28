@@ -1,10 +1,21 @@
 package handlers;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.security.SecureRandom;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.NewCookie;
+import javax.ws.rs.core.Response;
+
+import org.apache.commons.codec.binary.Base64;
 
 import dropbox.RESTDropbox;
 
@@ -28,6 +39,25 @@ public class AuthorisationController {
     RESTDropbox dropbox = new RESTDropbox();
     String auth_link = dropbox.getAuthorisationLink();
     return "{\"auth_link\": \"" + auth_link + "\"}";
+  }
+
+  // Generate a random string to use as a CSRF token.
+  private static String generateCSRFToken() {
+    byte[] b = new byte[18];
+    new SecureRandom().nextBytes(b);
+    return Base64.encodeBase64URLSafeString(b);
+  }
+
+  @GET
+  @Path("auth_redirect")
+  public Response redirectAuthorisation(@Context HttpServletRequest request) {
+    RESTDropbox dropbox = new RESTDropbox();
+
+    HttpSession session = request.getSession(true);
+    String sessionKey = "dropbox-auth-csrf-token";
+    String redirectURI = "http://localhost:8080/DropboxDemo/";
+
+    return dropbox.getAuthorisationLink(session, sessionKey, redirectURI);
   }
 
   /**
