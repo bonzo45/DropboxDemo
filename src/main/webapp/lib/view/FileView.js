@@ -2,7 +2,7 @@ var FileView = Backbone.View.extend({
 	// Put this view in the directory div
 	tagName : "tr",
 
-	// The template can be found here
+	// Template can be found here
 	template: $("#file-template").html(),
 
 	initialize: function(filemodel) {

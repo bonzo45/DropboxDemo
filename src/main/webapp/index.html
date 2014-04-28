@@ -3,15 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <link rel="stylesheet" type="text/css" href="styles.css">
-  <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+  
+  <!-- Backbone Underscore and JQuery -->
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
   <script src="lib/underscore-min.js"></script>
   <script src="lib/backbone-min.js"></script>
-  <script src="lib/dropbox-handler.js"></script>
-
+  
   <!-- Dropbox Chooser -->
   <script type="text/javascript" src="https://www.dropbox.com/static/api/2/dropins.js" id="dropboxjs" data-app-key="ar4df9h55qh7t6j"></script>
+  
+  <!-- Font Awesome - used for the file/folder and Dropbox icons -->
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 
+  <!-- Template for displaying a file -->
   <script type='text/template' id='file-template'>
       <td>
         <% 
@@ -62,77 +66,30 @@
       </td>
   </script>
   
+  <!-- Backbone Model/View/Collections -->
   <script src="lib/model/FileModel.js"></script>
   <script src="lib/collection/DirectoryCollection.js"></script>
   <script src="lib/view/FileView.js"></script>
   <script src="lib/view/DirectoryView.js"></script>
+  
+  <!-- Pulls the application's authentication link and access code -->
+  <script src="lib/dropbox-handler.js"></script>
+  
+  <!-- File Uploading -->
+  <script src="lib/upload.js"></script>
+  
 	<script>
 		function init() {
-			/* Display the Authorisation Link (for new users) */
-			getAuthorisationLink();
-			
-			/* Insert Dropbox 'chooser' (for pulling files from Dropbox) */
-			options = {
-				success : function(files) {
-					var regex = /https:\/\/dl.dropboxusercontent.com\/1\/view\/([^\/]*)\/(.*)/;
-					var matches = regex.exec(files[0].link);
-					var path = matches[2];
-					var accessToken = $("#access_token").val();
-					var urlToContact = "dropbox/files/" + files[0].name + "/from_dropbox" + "?access_token=" + accessToken;
-					$.ajax({
-			      type: "PUT",
-			      url: urlToContact,
-			      complete: function() {
-			          rootDirectory.fetch({reset: true});
-			        }
-					})
-				},
+			dropboxInit();
 	
-				linkType : "direct",
-				
-				// TODO: Allow many files to be pulled at once.
-				multiselect : false
-			};
-			var button = Dropbox.createChooseButton(options);
-			document.getElementById("dropbox_chooser").appendChild(button);
-	
-			/* Show files currently on the server */
+			/* Display files at server 'root' directory */
 			rootDirectory = new DirectoryCollection();
 			rootDirectoryView = new DirectoryView(rootDirectory);
 			rootDirectoryView.setElement("#directory");
-			rootDirectoryView.render();
 			rootDirectory.fetch({
 				reset : true
 			});
 		}
-		
-		// Asynchronous File Upload
-		function uploadFile() {
-			var formObj = $("#upload_file");
-			var fileObj = $("#upload_file_field");
-	    var filePath = $("#upload_file_field").val();
-	    var fileName = filePath.split("\\").pop();
-	    var formURL = "dropbox/files/" + fileName;
-	    var formData = new FormData();
-	    formData.append('file', fileObj[0].files[0]);
-	    $.ajax({
-	     url: formURL,
-	     type: 'POST',
-	     data:  formData,
-	     mimeType:"multipart/form-data",
-	     contentType: false,
-	     cache: false,
-	     processData:false,
-	     success: function(data, textStatus, jqXHR) {
-	    	 rootDirectory.fetch({reset: true});
-	     },
-	     error: function(jqXHR, textStatus, errorThrown) {
-	     
-	     }          
-	    });
-	    return false;
-		}
-
 	</script>
 
 <title>Sam's Incredible Demonstration</title>

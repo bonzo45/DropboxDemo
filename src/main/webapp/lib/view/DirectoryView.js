@@ -3,10 +3,6 @@ var DirectoryView = Backbone.View.extend({
   tagName: 'div',
   className: 'todoList',
   
-  // Model
-  files: [],
-  fileViews: [],
-  
   // Take in all the files, create views for them all.
   initialize: function(directoryCollection) {
     this.collection = directoryCollection;
