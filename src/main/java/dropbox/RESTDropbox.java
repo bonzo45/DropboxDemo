@@ -6,6 +6,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Locale;
 
+import javax.servlet.http.HttpSession;
+
 import org.apache.log4j.Logger;
 
 import com.dropbox.core.DbxAccountInfo;
@@ -14,6 +16,9 @@ import com.dropbox.core.DbxAuthFinish;
 import com.dropbox.core.DbxClient;
 import com.dropbox.core.DbxException;
 import com.dropbox.core.DbxRequestConfig;
+import com.dropbox.core.DbxSessionStore;
+import com.dropbox.core.DbxStandardSessionStore;
+import com.dropbox.core.DbxWebAuth;
 import com.dropbox.core.DbxWebAuthNoRedirect;
 import com.dropbox.core.DbxWriteMode;
 
@@ -183,5 +188,12 @@ public class RESTDropbox {
       System.err.println("Download Error: Could not read file.");
     }
 
+  }
+
+  public String getAuthorisationRedirect(HttpSession session,
+      String sessionKey, String returnURI) {
+    DbxSessionStore csrfTokenStore = new DbxStandardSessionStore(session, sessionKey);
+    DbxWebAuth newWebAuth = new DbxWebAuth(config, appInfo, returnURI, csrfTokenStore);
+    return newWebAuth.start();
   }
 }

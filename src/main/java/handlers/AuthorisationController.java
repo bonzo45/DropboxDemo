@@ -6,14 +6,18 @@ import java.security.SecureRandom;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.ws.rs.CookieParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
 
 import org.apache.commons.codec.binary.Base64;
 
@@ -49,15 +53,45 @@ public class AuthorisationController {
   }
 
   @GET
-  @Path("auth_redirect")
-  public Response redirectAuthorisation(@Context HttpServletRequest request) {
+  @Path("redirect_to_dropbox")
+  public Response redirectAuthorisation(@Context HttpServletRequest request)
+      throws URISyntaxException {
     RESTDropbox dropbox = new RESTDropbox();
 
+    // Get Session
     HttpSession session = request.getSession(true);
+    // Generate new Session Key
     String sessionKey = "dropbox-auth-csrf-token";
-    String redirectURI = "http://localhost:8080/DropboxDemo/";
+    // Return here when Dropbox has finished authenticating.
+    String returnURI = "http://localhost:8080/DropboxDemo/dropbox/auth/back_from_dropbox";
 
-    return dropbox.getAuthorisationLink(session, sessionKey, redirectURI);
+    String dropboxRedirect = dropbox.getAuthorisationRedirect(session, sessionKey, returnURI);
+    // Re-direct user to dropbox, setting the session key as a cookie so we can
+    // check it later.
+    return Response.seeOther(new URI(dropboxRedirect))
+        .cookie(new NewCookie("csrf", sessionKey)).build();
+  }
+
+  @GET
+  @Path("back_from_dropbox")
+  public Response backFromDropbox(@Context HttpServletRequest request,
+      @CookieParam(value = "csrf") String sessionKey,
+      @QueryParam("state") String dropboxSessionKey,
+      @QueryParam("code") String authenticationCode) {
+    RESTDropbox dropbox = new RESTDropbox();
+
+    // Get Session
+    HttpSession session = request.getSession(true);
+ 
+    // Check Session Key matches
+    if (sessionKey.equals(dropboxSessionKey)) {
+      
+    }
+    
+    // TODO: http://dropbox.github.io/dropbox-sdk-java/api-docs/v1.7.x/com/dropbox/core/DbxWebAuth.html
+
+    
+    return null;
   }
 
   /**
