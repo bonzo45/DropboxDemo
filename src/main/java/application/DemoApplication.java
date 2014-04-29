@@ -1,20 +1,22 @@
 package application;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.ws.rs.core.Application;
-
 import org.glassfish.jersey.filter.LoggingFilter;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
+import org.glassfish.jersey.server.ResourceConfig;
+import org.glassfish.jersey.server.mvc.MvcFeature;
+import org.glassfish.jersey.server.mvc.freemarker.FreemarkerMvcFeature;
 
-public class DemoApplication extends Application {
-  @Override
-  public Set<Class<?>> getClasses() {
-      final Set<Class<?>> classes = new HashSet<Class<?>>();
-      // Let (maybe the web server)? know that we support multi-part things...
-      classes.add(MultiPartFeature.class);
-      classes.add(LoggingFilter.class);
-      return classes;
+public class DemoApplication extends ResourceConfig {
+  
+  public DemoApplication() {
+    // Let the server know that we support multi-part things...
+    this.register(MultiPartFeature.class);
+
+    // We also support a logging filter, this makes requests/responses appear in the console.
+    this.register(LoggingFilter.class);
+    
+    // We support Freemarker templates (used for index page)
+    //this.property(MvcFeature.TEMPLATE_BASE_PATH, "templates");
+    this.register(FreemarkerMvcFeature.class);
   }
 }

@@ -16,6 +16,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.glassfish.jersey.server.mvc.Viewable;
+
 import dropbox.RESTDropbox;
 
 /**
@@ -96,7 +98,7 @@ public class AuthorisationController {
    */
   @GET
   @Path("redirect_from_dropbox")
-  public String backFromDropbox(@QueryParam("state") String token,
+  public Viewable backFromDropbox(@QueryParam("state") String token,
       @QueryParam("code") String authenticationCode) {
     // Retrieve the Dropbox 'State' from storage.
     RESTDropbox dropbox = dbxStates.remove(1);
@@ -108,7 +110,7 @@ public class AuthorisationController {
     hashMap.put("state", state);
     hashMap.put("code", code);
 
-    return dropbox.getAccessTokenRedirect(hashMap);
+    return null;//dropbox.getAccessTokenRedirect(hashMap);
   }
 
   /**
