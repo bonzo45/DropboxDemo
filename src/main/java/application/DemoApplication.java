@@ -3,7 +3,6 @@ package application;
 import org.glassfish.jersey.filter.LoggingFilter;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
-import org.glassfish.jersey.server.mvc.MvcFeature;
 import org.glassfish.jersey.server.mvc.freemarker.FreemarkerMvcFeature;
 
 public class DemoApplication extends ResourceConfig {
@@ -16,7 +15,6 @@ public class DemoApplication extends ResourceConfig {
     this.register(LoggingFilter.class);
     
     // We support Freemarker templates (used for index page)
-    //this.property(MvcFeature.TEMPLATE_BASE_PATH, "templates");
     this.register(FreemarkerMvcFeature.class);
   }
 }
