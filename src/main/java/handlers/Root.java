@@ -24,7 +24,8 @@ public class Root {
   @GET
   public Viewable backFromDropbox(@QueryParam("state") String token,
       @QueryParam("code") String authenticationCode) {
-
+    Viewable result;
+    
     // If returning from Dropbox authentication
     if (token != null && authenticationCode != null) {
       // Retrieve the Dropbox 'State' from storage.
@@ -38,11 +39,11 @@ public class Root {
       hashMap.put("code", code);
 
       String accessToken = dropbox.getAccessTokenRedirect(hashMap);
+      result = new Viewable("/test.ftl", accessToken);
     } else {
-
+      result = new Viewable("/test.ftl");
     }
 
-    Viewable result = new Viewable("/test.ftl");
     return result;
   }
 }

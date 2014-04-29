@@ -107,7 +107,7 @@
   
   <div id="access_token_instructions" class="instructions">Been here before? Paste your access token here.</div>
   <form id="access_code_authentication" onSubmit="return getAccountDetails()">
-    <input type="text" name="access_code" id="access_token" class="input"></input>
+    <input type="text" name="access_code" id="access_token" class="input" value="${model! ''}"></input>
     <input type="submit" name="done" class="submit"></input>
   </form>
   
