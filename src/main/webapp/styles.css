@@ -72,3 +72,8 @@ td {
 	color: grey;
 }
 
+.redirect_button {
+	width: 250px;
+	height: 40px;
+	font-size: 12pt;
+}

@@ -2,12 +2,12 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <link rel="stylesheet" type="text/css" href="styles.css">
+  <link rel="stylesheet" type="text/css" href="/DropboxDemo/styles.css">
   
   <!-- Backbone Underscore and JQuery -->
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-  <script src="lib/underscore-min.js"></script>
-  <script src="lib/backbone-min.js"></script>
+  <script src="/DropboxDemo/lib/underscore-min.js"></script>
+  <script src="/DropboxDemo/lib/backbone-min.js"></script>
   
   <!-- Dropbox Chooser -->
   <script type="text/javascript" src="https://www.dropbox.com/static/api/2/dropins.js" id="dropboxjs" data-app-key="ar4df9h55qh7t6j"></script>
@@ -67,16 +67,16 @@
   </script>
   
   <!-- Backbone Model/View/Collections -->
-  <script src="lib/model/FileModel.js"></script>
-  <script src="lib/collection/DirectoryCollection.js"></script>
-  <script src="lib/view/FileView.js"></script>
-  <script src="lib/view/DirectoryView.js"></script>
+  <script src="/DropboxDemo/lib/model/FileModel.js"></script>
+  <script src="/DropboxDemo/lib/collection/DirectoryCollection.js"></script>
+  <script src="/DropboxDemo/lib/view/FileView.js"></script>
+  <script src="/DropboxDemo/lib/view/DirectoryView.js"></script>
   
   <!-- Pulls the application's authentication link and access code -->
-  <script src="lib/dropbox-handler.js"></script>
+  <script src="/DropboxDemo/lib/dropbox-handler.js"></script>
   
   <!-- File Uploading -->
-  <script src="lib/upload.js"></script>
+  <script src="/DropboxDemo/lib/upload.js"></script>
   
 	<script>
 		function init() {
@@ -97,6 +97,10 @@
 <body onload="init()">
   
   <h1>Sam's Incredible Demonstration</h1>
+  
+  <form id="redirect_form" action="dropbox/auth/redirect_to_dropbox">
+    <button type="submit" name="done" class="redirect_button">One-Click Authenticate</button>
+  </form>
   
   <div class="instructions">First time? Visit the link below and copy the authorisation code here.</div>
   <div id="authorisation_link" class="url">insert link here...</div>
