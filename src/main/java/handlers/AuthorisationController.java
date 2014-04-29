@@ -38,7 +38,7 @@ public class AuthorisationController {
    * MEMORY LEAK Ignored in this demo as each following state overwrites the
    * last.
    */
-  private static ConcurrentHashMap<Integer, RESTDropbox> dbxStates = new ConcurrentHashMap<>();
+  public static ConcurrentHashMap<Integer, RESTDropbox> dbxStates = new ConcurrentHashMap<>();
 
   /**
    * Return JSON containing this application's authorisation link.
@@ -76,7 +76,7 @@ public class AuthorisationController {
     // Session Key's Name
     String sessionKey = "dropbox-auth-csrf-token";
     // Return here when Dropbox has finished authenticating.
-    String returnURI = "http://localhost:8080/DropboxDemo/dropbox/auth/redirect_from_dropbox";
+    String returnURI = "http://localhost:8080/DropboxDemo/dropbox";
 
     // Get redirect URL
     String dropboxRedirect = dropbox.getAuthorisationRedirect(session,
@@ -84,33 +84,7 @@ public class AuthorisationController {
     // Store the Dropbox State so we can do a CSRF check when they return.
     dbxStates.put(1, dropbox);
     // Re-direct user to dropbox.
-    return Response.seeOther(new URI(dropboxRedirect)).build();  
-  }
-
-  /**
-   * When the user returns from Dropbox Authentication they are sent here.
-   * 
-   * @param token
-   *          - used for CSRF detection
-   * @param authenticationCode
-   *          - Authentication Code used to get Access Token
-   * @return
-   */
-  @GET
-  @Path("redirect_from_dropbox")
-  public Viewable backFromDropbox(@QueryParam("state") String token,
-      @QueryParam("code") String authenticationCode) {
-    // Retrieve the Dropbox 'State' from storage.
-    RESTDropbox dropbox = dbxStates.remove(1);
-
-    // Reconstruct the parameter map - Jersey consumed it :-(
-    HashMap<String, String[]> hashMap = new HashMap<String, String[]>();
-    String[] state = { token };
-    String[] code = { authenticationCode };
-    hashMap.put("state", state);
-    hashMap.put("code", code);
-
-    return null;//dropbox.getAccessTokenRedirect(hashMap);
+    return Response.seeOther(new URI(dropboxRedirect)).build();
   }
 
   /**

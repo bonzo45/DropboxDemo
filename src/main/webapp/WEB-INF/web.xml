@@ -21,7 +21,13 @@
 			<param-name>javax.ws.rs.Application</param-name>
 			<param-value>application.DemoApplication</param-value>
 		</init-param>
-
+		
+		<!-- Where are our Freemarker templates? -->
+    <init-param>
+        <param-name>jersey.config.server.mvc.templateBasePath.freemarker</param-name>
+        <param-value>freemarker</param-value>
+    </init-param>
+    
 		<!-- Make this servlet the first one to load when the web server starts. -->
 		<load-on-startup>1</load-on-startup>
 	</servlet>

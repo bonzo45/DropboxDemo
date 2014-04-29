@@ -92,7 +92,7 @@
 		}
 	</script>
 
-<title>Sam's Incredible Demonstration</title>
+<title>Holy sh*tsnacks!</title>
 </head>
 <body onload="init()">
   
