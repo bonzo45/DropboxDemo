@@ -234,29 +234,14 @@ public class RESTDropbox {
    *          where state is used for CSRF detection and code is the
    *          authentication code.
    * @return
+   * @throws DbxException 
+   * @throws ProviderException 
+   * @throws NotApprovedException 
+   * @throws CsrfException 
+   * @throws BadStateException 
+   * @throws BadRequestException 
    */
-  public String getAccessTokenRedirect(Map<String, String[]> parameterMap) {
-    try {
+  public String getAccessTokenRedirect(Map<String, String[]> parameterMap) throws BadRequestException, BadStateException, CsrfException, NotApprovedException, ProviderException, DbxException {
       return webAuth.finish(parameterMap).accessToken;
-    } catch (BadRequestException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (BadStateException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (CsrfException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (NotApprovedException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (ProviderException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (DbxException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-    return null;
   }
 }
