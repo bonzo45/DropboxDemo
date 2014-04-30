@@ -47,8 +47,7 @@ public class JsonConverter {
     } catch (JsonMappingException e) {
       System.err.println("Could not recover object from string " + string);
     } catch (IOException e) {
-      System.err.println("An error occurred while recovering object from "
-          + string);
+      System.err.println("An error occurred while recovering object from " + string);
     }
     return null;
   }

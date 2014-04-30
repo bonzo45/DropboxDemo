@@ -3,6 +3,7 @@ package handlers;
 import jackson.JsonConverter;
 
 import java.io.InputStream;
+import java.util.UUID;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -15,6 +16,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.log4j.Logger;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import dropbox.RESTDropbox;
@@ -22,6 +24,8 @@ import storage.LocalStorage;
 
 @Path("/files/{file_path}")
 public class FileController {
+
+  private static Logger LOG = Logger.getLogger(FileController.class);
 
   /**
    * Returns JSON with all of the information about a file.
@@ -38,7 +42,7 @@ public class FileController {
   }
 
   /**
-   * Handles uploading of files to the server.
+   * Upload a file to the server.
    * 
    * @param fileInputStream
    *          - file stream of the file in the form.
@@ -47,10 +51,7 @@ public class FileController {
    */
   @POST
   @Consumes(MediaType.MULTIPART_FORM_DATA)
-  public Response uploadFile(
-      @FormDataParam("file") InputStream fileInputStream,
-      @PathParam("file_path") String filePath) {
-
+  public Response uploadFile(@FormDataParam("file") InputStream fileInputStream, @PathParam("file_path") String filePath) {
     LocalStorage.newFile(filePath, fileInputStream);
     String output = "File saved... maybe...";
     return Response.status(200).entity(output).build();
@@ -66,19 +67,15 @@ public class FileController {
    */
   @PUT
   @Path("to_dropbox")
-  public Response serverToDropbox(
-      @QueryParam("access_token") String accessToken,
-      @PathParam("file_path") String filePath) {
+  public Response serverToDropbox(@QueryParam("access_token") String accessToken, @PathParam("file_path") String filePath) {
     RESTDropbox dropbox = new RESTDropbox(accessToken);
-    dropbox.upload(filePath, "/" + filePath);
-    return Response.status(200).entity("Probably went alright...").build();
+    return dropbox.upload(filePath, "/" + filePath);
   }
 
   /**
    * Pulls a file from Dropbox to the server.
    * 
-   * NOTE: Files pulled from directory/subdirectory/file.jpg will be placed at
-   * /file.jpg on the server.
+   * NOTE: Files pulled from directory/subdirectory/file.jpg will be placed at /file.jpg on the server.
    * 
    * @param accessToken
    * @param filePath
@@ -87,11 +84,8 @@ public class FileController {
    */
   @PUT
   @Path("from_dropbox")
-  public Response dropboxToServer(
-      @QueryParam("access_token") String accessToken,
-      @PathParam("file_path") String filePath) {
+  public Response dropboxToServer(@QueryParam("access_token") String accessToken, @PathParam("file_path") String filePath) {
     RESTDropbox dropbox = new RESTDropbox(accessToken);
-    dropbox.download("/" + filePath, filePath);
-    return Response.status(200).entity("Probably went alright...").build();
+    return dropbox.download("/" + filePath, filePath);
   }
 }

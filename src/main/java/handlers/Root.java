@@ -23,9 +23,9 @@ import dropbox.RESTDropbox;
 
 @Path("/")
 public class Root {
-  
-  public static Logger LOG = Logger.getLogger(Root.class);
-  
+
+  private static Logger LOG = Logger.getLogger(Root.class);
+
   /**
    * When the user returns from Dropbox Authentication they are sent here.
    * 
@@ -34,16 +34,9 @@ public class Root {
    * @param authenticationCode
    *          - Authentication Code used to get Access Token
    * @return
-   * @throws DbxException
-   * @throws ProviderException
-   * @throws NotApprovedException
-   * @throws CsrfException
-   * @throws BadStateException
-   * @throws BadRequestException
    */
   @GET
-  public Response backFromDropbox(@QueryParam("state") String token,
-      @QueryParam("code") String authenticationCode) {
+  public Response backFromDropbox(@QueryParam("state") String token, @QueryParam("code") String authenticationCode) {
     Viewable result;
 
     // If returning from Dropbox authentication
@@ -58,41 +51,39 @@ public class Root {
       hashMap.put("state", state);
       hashMap.put("code", code);
 
+      // Try to read the access token and catch any error that occurs.
       String accessToken = null;
       try {
         accessToken = dropbox.getAccessTokenRedirect(hashMap);
       } catch (BadRequestException e) {
-        LOG.warn("Dropbox BadRequestException: Parameters not well formed. "
-            + e.getMessage());
-        return Response.status(400).entity("Parameters not well formed.")
-            .build();
+        /* Bad Parameters */
+        LOG.warn("Dropbox BadRequestException: Parameters not well formed. " + e.getMessage());
+        return Response.status(400).entity("Parameters not well formed.").build();
       } catch (BadStateException e) {
-        LOG.warn("Dropbox BadStateException: Redirecting to authentication. "
-            + e.getMessage());
+        /* Bad State */
+        LOG.warn("Dropbox BadStateException: Redirecting to authentication. " + e.getMessage());
         try {
-          return Response.seeOther(new URI("/")).build();
+          return Response.seeOther(new URI("")).build();
         } catch (URISyntaxException e1) {
           LOG.error("Dropbox BadStateException URISyntaxException: Could not redirect.");
-          return Response.status(500).entity("Sorry, couldn't re-direct you.")
-              .build();
+          return Response.status(500).entity("Sorry... can't re-direct you.").build();
         }
       } catch (CsrfException e) {
+        /* Cross Site Request Forgery Detected (CSRF Mismatch) */
         LOG.error("Dropbox CsrfException: CSRF Mismatch. " + e.getMessage());
         return Response.status(403).entity("CSRF Check Failed").build();
       } catch (NotApprovedException e) {
+        /* User Declined Permission */
         LOG.info("Dropbox NotApprovedException: authorisation not approved by user.");
-        return Response.status(200).entity("User denied access to Dropbox.")
-            .build();
+        return Response.status(200).entity("User denied access to Dropbox.").build();
       } catch (ProviderException e) {
-        LOG.warn("Dropbox ProviderException: error communicating with Dropbox. "
-            + e.getMessage());
-        return Response.status(503)
-            .entity("Could not communicate with Dropbox").build();
+        /* Problems with Dropbox */
+        LOG.warn("Dropbox ProviderException: error communicating with Dropbox. " + e.getMessage());
+        return Response.status(503).entity("Could not communicate with Dropbox").build();
       } catch (DbxException e) {
-        LOG.warn("Dropbox DbxException: general exception thrown. "
-            + e.getMessage());
-        return Response.status(503)
-            .entity("Could not communicate with Dropbox").build();
+        /* General Catch All */
+        LOG.warn("Dropbox DbxException: general exception thrown. " + e.getMessage());
+        return Response.status(503).entity("Could not communicate with Dropbox").build();
       }
       result = new Viewable("/test.ftl", accessToken);
     } else {

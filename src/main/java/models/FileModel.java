@@ -55,8 +55,7 @@ public class FileModel implements BasicFileAttributes {
   }
 
   /**
-   * A constructor used by Jackson to create an object from a JSON
-   * representation.
+   * A constructor used by Jackson to create an object from a JSON representation.
    * 
    * @param creationTime
    * @param lastAccessTime
@@ -70,15 +69,9 @@ public class FileModel implements BasicFileAttributes {
    * @param dropboxPath
    */
   @JsonCreator
-  public FileModel(@JsonProperty("creationTime") long creationTime,
-      @JsonProperty("lastAccessTime") long lastAccessTime,
-      @JsonProperty("lastModifiedTime") long lastModifiedTime,
-      @JsonProperty("directory") boolean directory,
-      @JsonProperty("other") boolean other,
-      @JsonProperty("regularFile") boolean regularFile,
-      @JsonProperty("symbolicLink") boolean symbolicLink,
-      @JsonProperty("size") long size,
-      @JsonProperty("inDropbox") boolean inDropbox,
+  public FileModel(@JsonProperty("creationTime") long creationTime, @JsonProperty("lastAccessTime") long lastAccessTime, @JsonProperty("lastModifiedTime") long lastModifiedTime,
+      @JsonProperty("directory") boolean directory, @JsonProperty("other") boolean other, @JsonProperty("regularFile") boolean regularFile,
+      @JsonProperty("symbolicLink") boolean symbolicLink, @JsonProperty("size") long size, @JsonProperty("inDropbox") boolean inDropbox,
       @JsonProperty("dropboxPath") String dropboxPath) {
     this.creationTime = creationTime;
     this.lastAccessTime = lastAccessTime;
