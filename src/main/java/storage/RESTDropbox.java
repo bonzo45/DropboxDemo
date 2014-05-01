@@ -10,12 +10,10 @@ import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
-import javax.ws.rs.core.Response;
+
+import models.AccountDetails;
 
 import org.apache.log4j.Logger;
-
-import things.AccountDetails;
-import things.SamFile;
 
 import com.dropbox.core.DbxAccountInfo;
 import com.dropbox.core.DbxAppInfo;
@@ -219,6 +217,7 @@ public class RESTDropbox implements CloudFileStore {
    * @param parameterMap
    *          - a map from String to String[] containing "state" and "code" where state is used for CSRF detection and code is the authentication code.
    * @return
+   * @throws com.dropbox.core.DbxWebAuth.ProviderException 
    * @throws DbxException
    * @throws ProviderException
    * @throws NotApprovedException
@@ -226,8 +225,7 @@ public class RESTDropbox implements CloudFileStore {
    * @throws BadStateException
    * @throws BadRequestException
    */
-  public String getAccessTokenRedirect(Map<String, String[]> parameterMap) throws BadRequestException, BadStateException, CsrfException, NotApprovedException, ProviderException,
-      DbxException {
+  public String getAccessTokenRedirect(Map<String, String[]> parameterMap) throws BadRequestException, BadStateException, CsrfException, NotApprovedException, com.dropbox.core.DbxWebAuth.ProviderException, DbxException {
     return webAuth.finish(parameterMap).accessToken;
   }
 }

@@ -8,13 +8,13 @@ import java.util.List;
 /**
  * An object storing the information associated with a Directory (a list of files).
  */
-public class DirectoryModel {
+public class DirectoryMetadata {
 
   // Models corresponding to all of the files in the directory.
-  private List<FileModel> files;
+  private List<FileMetadata> files;
 
-  public DirectoryModel() {
-    files = new ArrayList<FileModel>();
+  public DirectoryMetadata() {
+    files = new ArrayList<FileMetadata>();
   }
 
   /**
@@ -22,7 +22,7 @@ public class DirectoryModel {
    * 
    * @param file
    */
-  public void addFile(FileModel file) {
+  public void addFile(FileMetadata file) {
     files.add(file);
   }
 
@@ -33,7 +33,7 @@ public class DirectoryModel {
    */
   public String toJSON() {
     String result = "";
-    for (FileModel file : files) {
+    for (FileMetadata file : files) {
       result += JsonConverter.getJSONString(file);
       result += ",";
     }

@@ -18,15 +18,12 @@ import java.nio.file.attribute.BasicFileAttributes;
 
 import org.apache.log4j.Logger;
 
-import models.DirectoryModel;
-import models.FileModel;
+import models.DirectoryMetadata;
+import models.FileMetadata;
 
 public class LocalStorage {
 
   private static Logger LOG = Logger.getLogger(LocalStorage.class);
-
-  private static final String FILE_PATH = "/Users/Sam/files/";
-  private static final String METADATA_SUFFIX = ".meta";
 
   /**
    * Create a new file on the file system.
@@ -67,7 +64,7 @@ public class LocalStorage {
    *          - path of the directory.
    * @return Directory information.
    */
-  public static DirectoryModel getDirectory(String directoryPath) {
+  public static DirectoryMetadata getDirectory(String directoryPath) {
     java.io.File folder = new java.io.File(FILE_PATH + directoryPath);
     java.io.File[] listOfFiles = folder.listFiles();
 
@@ -77,7 +74,7 @@ public class LocalStorage {
       return null;
     }
 
-    DirectoryModel directoryModel = new DirectoryModel();
+    DirectoryMetadata directoryModel = new DirectoryMetadata();
     // Go through each file in the directory.
     for (File file : listOfFiles) {
       // Get it's name
@@ -99,35 +96,20 @@ public class LocalStorage {
    *          - path of the file.
    * @return File metadata.
    */
-  public static FileModel getFile(String filePathString) {
+  public static FileMetadata getFile(String filePathString) {
     // Create path to metadata
     String metadataPath = FILE_PATH + filePathString + METADATA_SUFFIX;
 
     // Read the stored information
-    FileModel result = null;
+    FileMetadata result = null;
     try (BufferedReader br = new BufferedReader(new FileReader(metadataPath))) {
       String line = br.readLine();
-      result = JsonConverter.getObjectFromJson(line, FileModel.class);
+      result = JsonConverter.getObjectFromJson(line, FileMetadata.class);
     } catch (IOException e) {
       LOG.error("Could not read metadata from: " + metadataPath);
     }
 
     return result;
-  }
-
-  /**
-   * Mark a file as in Dropbox.
-   * 
-   * @param localPath
-   *          - path of file to mark
-   * @param dropboxPath
-   *          - path in Dropbox
-   */
-  public static void setInDropbox(String localPath, String dropboxPath) {
-    FileModel originalData = getFile(localPath);
-    originalData.setInDropbox(true);
-    originalData.setDropboxPath(dropboxPath);
-    saveMetadata(localPath, JsonConverter.getJSONString(originalData));
   }
 
   /**
@@ -143,7 +125,7 @@ public class LocalStorage {
    */
   public static void generateFileMetadata(String filePath, boolean inDropbox, String dropboxPath) {
     // Gather information about file
-    FileModel info = getMetadataFromFile(filePath);
+    FileMetadata info = getMetadataFromFile(filePath);
 
     // Set whether or not it's in Dropbox.
     info.setInDropbox(inDropbox);
@@ -164,7 +146,7 @@ public class LocalStorage {
    *          - path of the file.
    * @return
    */
-  private static FileModel getMetadataFromFile(String filePathString) {
+  private static FileMetadata getMetadataFromFile(String filePathString) {
     // Try to read attributes from the file.
     BasicFileAttributes attr;
     try {
@@ -181,7 +163,7 @@ public class LocalStorage {
     String path = getFilePath(filePathString);
 
     // Create a new model with all of this information.
-    return new models.FileModel(name, path, attr);
+    return new models.FileMetadata(name, path, attr);
   }
 
   /**
@@ -204,55 +186,4 @@ public class LocalStorage {
     }
   }
 
-  /**
-   * Returns an input stream corresponding to a file. Can be used for reading from a file directly.
-   * 
-   * @param filePath
-   * @return
-   */
-  public static InputStream getFileInputStream(String filePath) {
-    try {
-      return new FileInputStream(FILE_PATH + filePath);
-    } catch (FileNotFoundException e) {
-      return null;
-    }
-  }
-
-  /**
-   * Returns an output stream corresponding to a file. Can be used for writing to a file directly.
-   * 
-   * @param filePath
-   * @return
-   * @throws FileNotFoundException
-   */
-  public static OutputStream getFileOutputStream(String filePath) throws FileNotFoundException {
-    return new FileOutputStream(FILE_PATH + filePath);
-  }
-
-  /**
-   * Separates the file name from the rest of the path.
-   * 
-   * @param filePath
-   * @return
-   */
-  private static String getFileName(String filePath) {
-    // Create Path
-    java.nio.file.Path path = FileSystems.getDefault().getPath(FILE_PATH, filePath);
-
-    return path.getFileName().toString();
-  }
-
-  /**
-   * Separates the file path from the file name.
-   * 
-   * @param filePath
-   * @return
-   */
-  private static String getFilePath(String filePath) {
-    // Create Path
-    java.nio.file.Path path = FileSystems.getDefault().getPath(FILE_PATH, filePath);
-
-    String name = path.getFileName().toString();
-    return filePath.substring(0, filePath.length() - name.length());
-  }
 }

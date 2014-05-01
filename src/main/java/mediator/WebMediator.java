@@ -2,7 +2,7 @@ package mediator;
 
 import javax.ws.rs.core.Response;
 
-import things.SamFile;
+import storage.SamFile;
 
 public interface WebMediator {
 

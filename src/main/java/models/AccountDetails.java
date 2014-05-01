@@ -1,4 +1,4 @@
-package things;
+package models;
 
 public class AccountDetails {
 
@@ -19,5 +19,4 @@ public class AccountDetails {
         "\"country\": " + country +
         "}";
   }
-  
 }

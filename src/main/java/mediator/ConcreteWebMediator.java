@@ -7,14 +7,14 @@ import java.security.ProviderException;
 
 import javax.ws.rs.core.Response;
 
-import storage.RESTDropbox;
-import things.SamFile;
+import storage.CloudFileStore;
+import storage.SamFile;
 
-public class DropboxWebMediator implements WebMediator {
+public class ConcreteWebMediator implements WebMediator {
 
-  private RESTDropbox dropbox;
+  private CloudFileStore dropbox;
 
-  public DropboxWebMediator(RESTDropbox dropbox) {
+  public ConcreteWebMediator(CloudFileStore dropbox) {
     this.dropbox = dropbox;
   }
 

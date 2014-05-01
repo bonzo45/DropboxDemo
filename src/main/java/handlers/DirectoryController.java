@@ -9,7 +9,7 @@ import javax.ws.rs.core.Response;
 
 import org.apache.log4j.Logger;
 
-import models.DirectoryModel;
+import models.DirectoryMetadata;
 import storage.LocalStorage;
 
 @Path("/directory")
@@ -28,7 +28,7 @@ public class DirectoryController {
   @Path("{directory}")
   @Produces(MediaType.APPLICATION_JSON)
   public Response getFiles(@PathParam("directory") String directoryString) {
-    DirectoryModel directory = LocalStorage.getDirectory(directoryString);
+    DirectoryMetadata directory = LocalStorage.getDirectory(directoryString);
 
     // If the directory is invalid
     if (directory == null) {

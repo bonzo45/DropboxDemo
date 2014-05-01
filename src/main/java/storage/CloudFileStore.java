@@ -5,8 +5,7 @@ import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 import java.security.ProviderException;
 
-import things.AccountDetails;
-import things.SamFile;
+import models.AccountDetails;
 
 public interface CloudFileStore {
 
