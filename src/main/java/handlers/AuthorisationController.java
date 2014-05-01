@@ -14,7 +14,7 @@ import javax.ws.rs.core.Response;
 
 import org.apache.log4j.Logger;
 
-import dropbox.RESTDropbox;
+import storage.RESTDropbox;
 
 /**
  * All of the handlers required for authenticating a Dropbox account with this web application.

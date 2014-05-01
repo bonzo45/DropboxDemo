@@ -12,14 +12,14 @@ import javax.ws.rs.core.Response;
 import org.apache.log4j.Logger;
 import org.glassfish.jersey.server.mvc.Viewable;
 
+import storage.RESTDropbox;
+
 import com.dropbox.core.DbxException;
 import com.dropbox.core.DbxWebAuth.BadRequestException;
 import com.dropbox.core.DbxWebAuth.BadStateException;
 import com.dropbox.core.DbxWebAuth.CsrfException;
 import com.dropbox.core.DbxWebAuth.NotApprovedException;
 import com.dropbox.core.DbxWebAuth.ProviderException;
-
-import dropbox.RESTDropbox;
 
 @Path("/")
 public class Root {

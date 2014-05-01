@@ -8,7 +8,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.log4j.Logger;
 
-import dropbox.RESTDropbox;
+import storage.RESTDropbox;
 
 /**
  * This simple web application has no user log in or authentication. If it did this path should be changed to /user/{user_name}. Rather than simply supplying the access token it
@@ -30,6 +30,6 @@ public class AccountController {
   @Produces(MediaType.APPLICATION_JSON)
   public String getAccountDetails(@QueryParam("access_token") String accessToken) {
     RESTDropbox dropbox = new RESTDropbox(accessToken);
-    return dropbox.getAccountDetailsAsJson();
+    return dropbox.getAccountDetails().toJson();
   }
 }

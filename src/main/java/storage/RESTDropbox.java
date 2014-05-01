@@ -1,9 +1,11 @@
-package dropbox;
+package storage;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.AccessDeniedException;
+import java.security.ProviderException;
 import java.util.Locale;
 import java.util.Map;
 
@@ -12,7 +14,8 @@ import javax.ws.rs.core.Response;
 
 import org.apache.log4j.Logger;
 
-import storage.LocalStorage;
+import things.AccountDetails;
+import things.SamFile;
 
 import com.dropbox.core.DbxAccountInfo;
 import com.dropbox.core.DbxAppInfo;
@@ -26,10 +29,9 @@ import com.dropbox.core.DbxWebAuth.BadRequestException;
 import com.dropbox.core.DbxWebAuth.BadStateException;
 import com.dropbox.core.DbxWebAuth.CsrfException;
 import com.dropbox.core.DbxWebAuth.NotApprovedException;
-import com.dropbox.core.DbxWebAuth.ProviderException;
 import com.dropbox.core.DbxWriteMode;
 
-public class RESTDropbox {
+public class RESTDropbox implements CloudFileStore {
 
   private static Logger LOG = Logger.getLogger(RESTDropbox.class);
 
@@ -77,30 +79,15 @@ public class RESTDropbox {
    * 
    * @return
    */
-  public DbxAccountInfo getAccountDetails() {
-    DbxAccountInfo info = null;
+  public AccountDetails getAccountDetails() {
+    AccountDetails info = null;
     try {
-      info = client.getAccountInfo();
+      DbxAccountInfo dropboxInfo = client.getAccountInfo();
+      info = new AccountDetails(dropboxInfo.userId, dropboxInfo.displayName, dropboxInfo.country);
     } catch (DbxException e) {
-      LOG.warn("Could not fetch Dropbox Account Details");
+      LOG.warn("Could not fetch Dropbox Account Details", e);
     }
     return info;
-  }
-
-  /**
-   * Retrieves a user's Dropbox account details (formatted as JSON).
-   * 
-   * @return
-   */
-  public String getAccountDetailsAsJson() {
-    DbxAccountInfo info = getAccountDetails();
-    String result = "";
-    if (info != null) {
-      result += "\"name\": \"" + info.displayName + "\",";
-      result += "\"country\": \"" + info.country + "\",";
-      result += "\"user_id\": \"" + info.userId + "\"";
-    }
-    return "{" + result + "}";
   }
 
   /**
@@ -111,38 +98,37 @@ public class RESTDropbox {
    * @param dest
    *          - destination file path e.g. "/images/image.jpg"
    */
-  public Response upload(String source, String dest) {
+  public void upload(SamFile source, SamFile dest) throws FileNotFoundException, AccessDeniedException, IOException, ProviderException {
     LOG.info("Dropbox Upload: Uploading " + source + " to " + dest);
 
     InputStream inputStream = null;
     try {
       // Attempt to open file
-      inputStream = LocalStorage.getFileInputStream(source);
+      inputStream = source.getInputStream();
       // Attempt to upload
-      client.uploadFile(dest, DbxWriteMode.add(), -1, inputStream);
-      LocalStorage.setInDropbox(source, dest);
+      client.uploadFile(dest.getFullPath(), DbxWriteMode.add(), -1, inputStream);
       LOG.info("Upload Successful");
-      return Response.ok().build();
 
     } catch (FileNotFoundException e) {
       String error = "Dropbox Upload: File not found: + source";
       LOG.error(error, e);
-      return Response.status(404).entity(error).build();
+      throw e;
 
     } catch (SecurityException e) {
       String error = "Dropbox Upload: Permission denied: " + source;
       LOG.error(error, e);
-      return Response.status(500).entity(error).build();
-
-    } catch (DbxException e) {
-      String error = "Dropbox Upload: Dropbox returned an error. " + e.getMessage();
-      LOG.error(error, e);
-      return Response.status(500).entity(error).build();
+      throw e;
 
     } catch (IOException e) {
       String error = "Dropbox Upload: Could not read file. " + e.getMessage();
       LOG.error(error, e);
-      return Response.status(500).entity(error).build();
+      throw e;
+      
+    } catch (DbxException e) {
+      String error = "Dropbox Upload: Dropbox returned an error. " + e.getMessage();
+      LOG.error(error, e);
+      throw new ProviderException(error);
+
     } finally {
       try {
         if (inputStream != null) {
@@ -150,6 +136,7 @@ public class RESTDropbox {
         }
       } catch (IOException e) {
         LOG.error("Dropbox Upload: Could not close file being uploaded.", e);
+        throw e;
       }
     }
   }
@@ -162,34 +149,37 @@ public class RESTDropbox {
    * @param dest
    *          - destination file path e.g. "/home/user/image.jpg"
    * @return
+   * @throws FileNotFoundException
    */
-  public Response download(String source, String dest) {
+  public void download(SamFile source, SamFile dest) throws FileNotFoundException, AccessDeniedException, IOException, ProviderException {
     LOG.info("Downloading " + source + " to " + dest);
+
     OutputStream outputStream = null;
 
     try {
       // Attempt to open file
-      outputStream = LocalStorage.getFileOutputStream(dest);
+      outputStream = dest.getOutputStream();
       // Attempt to download
-      client.getFile(source, null, outputStream);
-      LocalStorage.generateFileMetadata(dest, true, source);
+      client.getFile(source.getFullPath(), null, outputStream);
       LOG.info("Download Successful");
-      return Response.ok("Download Successful").build();
 
     } catch (FileNotFoundException e) {
-      String error = "Dropbox Download FileNotFoundException: File may be a directory or could not be created/opened. " + dest;
+      String error = "File may be a directory or could not be created/opened: " + dest;
       LOG.error(error, e);
-      return Response.status(404).entity(error).build();
+      throw e;
+      // return Response.status(404).entity(error).build();
 
     } catch (DbxException e) {
-      String error = "Dropbox Download DbxException: Dropbox returned an error. " + e.getMessage();
+      String error = "Dropbox returned an error.";
       LOG.error(error, e);
-      return Response.status(500).entity(error).build();
+      throw new ProviderException(error);
+      // return Response.status(500).entity(error).build();
 
     } catch (IOException e) {
-      String error = "Dropbox Download IOException: Could not write to file: " + dest + "-" + e.getMessage();
+      String error = "Could not write to file: " + dest;
       LOG.error(error, e);
-      return Response.status(500).entity(error).build();
+      throw e;
+      // return Response.status(500).entity(error).build();
 
     } finally {
       try {
@@ -197,7 +187,8 @@ public class RESTDropbox {
           outputStream.close();
         }
       } catch (IOException e) {
-        LOG.error("Dropbox Download: Could not close created file.", e);
+        LOG.error("Could not close created file.", e);
+        throw e;
       }
     }
   }
