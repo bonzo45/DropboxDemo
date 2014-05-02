@@ -10,7 +10,7 @@ import javax.ws.rs.core.Response;
 import org.apache.log4j.Logger;
 
 import models.DirectoryMetadata;
-import storage.LocalStorage;
+import storage.local.LocalStorage;
 
 @Path("/directory")
 public class DirectoryController {

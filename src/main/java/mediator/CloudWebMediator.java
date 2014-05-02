@@ -10,18 +10,18 @@ import javax.ws.rs.core.Response;
 import storage.CloudFileStore;
 import storage.SamFile;
 
-public class ConcreteWebMediator implements WebMediator {
+public class CloudWebMediator implements CloudWebMediatorInterface {
 
-  private CloudFileStore dropbox;
+  private CloudFileStore storage;
 
-  public ConcreteWebMediator(CloudFileStore dropbox) {
-    this.dropbox = dropbox;
+  public CloudWebMediator(CloudFileStore storage) {
+    this.storage = storage;
   }
 
   @Override
   public Response download(SamFile source, SamFile dest) {
     try {
-      dropbox.download(source, dest);
+      storage.download(source, dest);
       return Response.ok().build();
       
     } catch (AccessDeniedException e) {
@@ -42,7 +42,7 @@ public class ConcreteWebMediator implements WebMediator {
   @Override
   public Response upload(SamFile source, SamFile dest) {
     try {
-      dropbox.upload(source, dest);
+      storage.upload(source, dest);
       return Response.ok().build();
       
     } catch (AccessDeniedException e) {

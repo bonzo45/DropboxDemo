@@ -3,25 +3,42 @@ package storage;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Map;
+
+import models.FileMetadata;
 
 public abstract class SamFile {
 
+  protected FileMetadata metadata;
+
   public abstract InputStream getInputStream() throws FileNotFoundException;
+
   public abstract OutputStream getOutputStream() throws FileNotFoundException;
-  
-  public abstract String getFileName();
-  public abstract String getFilePath();
+
+  public String getFileName() {
+    return metadata.getName();
+  }
+
+  public String getFilePath() {
+    return metadata.getPath();
+  }
+
   public String getFullPath() {
     return getFilePath() + getFileName();
   }
-  
+
+  public FileMetadata getMetadata() {
+    return metadata;
+  };
+
+  public void setMetadata(FileMetadata metadata) {
+    this.metadata = metadata;
+  };
+
   public abstract void addCopy(String place, String path);
-  
-  public abstract void generateMetadata(Map<String, String> copies);
-  
+
   @Override
   public String toString() {
     return getFullPath();
   }
+  
 }

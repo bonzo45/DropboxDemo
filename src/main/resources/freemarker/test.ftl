@@ -66,6 +66,9 @@
       </td>
   </script>
   
+  <!-- URL Mappings -->
+  <script src="/DropboxDemo/lib/url.js"></script>
+  
   <!-- Backbone Model/View/Collections -->
   <script src="/DropboxDemo/lib/model/FileModel.js"></script>
   <script src="/DropboxDemo/lib/collection/DirectoryCollection.js"></script>
@@ -99,14 +102,7 @@
   <h1>Sam's Incredible Demonstration</h1>
   
   <form id="redirect_form" action="auth/redirect_to_dropbox">
-    <button type="submit" name="done" class="redirect_button">One-Click Authenticate</button>
-  </form>
-  
-  <div class="instructions">First time? Visit the link below and copy the authorisation code here.</div>
-  <div id="authorisation_link" class="url">insert link here...</div>
-  <form id="new_user_authentication" onSubmit="return getAccessToken()">
-    <input type="text" name="authorisation_code" id="authorisation_code" class="input"></input>
-    <input type="submit" name="done" class="submit"></input>
+    <button type="submit" name="done" class="redirect_button">Click to Authenticate</button>
   </form>
   
   <div id="access_token_instructions" class="instructions">Been here before? Paste your access token here.</div>

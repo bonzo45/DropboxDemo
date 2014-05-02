@@ -12,7 +12,7 @@ import javax.ws.rs.core.Response;
 import org.apache.log4j.Logger;
 import org.glassfish.jersey.server.mvc.Viewable;
 
-import storage.RESTDropbox;
+import storage.dropbox.RESTDropbox;
 
 import com.dropbox.core.DbxException;
 import com.dropbox.core.DbxWebAuth.BadRequestException;

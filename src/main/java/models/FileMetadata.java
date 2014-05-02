@@ -4,6 +4,8 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashMap;
 import java.util.Map;
 
+import util.FileUtil;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -15,17 +17,19 @@ public class FileMetadata {
 
   /* BasicFileAttributes Fields */
   private long creationTime;
-  private long lastAccessTime;
   private long lastModifiedTime;
   private boolean directory;
-  private boolean other;
-  private boolean regularFile;
-  private boolean symbolicLink;
+  private boolean file;
   private long size;
 
   /* Where are copies of this file? Dropbox/Google Drive/Mars? */
   private Map<String, String> copies = new HashMap<String, String>();
-  
+
+  public FileMetadata(String fullPath) {
+    this.name = FileUtil.extractName(fullPath);
+    this.path = FileUtil.extractPath(fullPath);
+  }
+
   /*
    * Constructor for when all attributes are not yet known.
    */
@@ -33,6 +37,7 @@ public class FileMetadata {
     this.name = name;
     this.path = path;
   }
+
   /**
    * Constructor for when attributes are known.
    * 
@@ -49,34 +54,27 @@ public class FileMetadata {
 
     setAttributes(attr);
   }
+
   /**
    * A constructor used by Jackson to create an object from a JSON representation.
    * 
-   * @param creationTime
-   * @param lastAccessTime
-   * @param lastModifiedTime
-   * @param directory
-   * @param other
-   * @param regularFile
-   * @param symbolicLink
-   * @param size
-   * @param inDropbox
-   * @param dropboxPath
    */
   @JsonCreator
-  public FileMetadata(@JsonProperty("name") String name, @JsonProperty("path") String path, @JsonProperty("creationTime") long creationTime,
-      @JsonProperty("lastAccessTime") long lastAccessTime, @JsonProperty("lastModifiedTime") long lastModifiedTime, @JsonProperty("directory") boolean directory,
-      @JsonProperty("other") boolean other, @JsonProperty("regularFile") boolean regularFile, @JsonProperty("symbolicLink") boolean symbolicLink, @JsonProperty("size") long size,
+  public FileMetadata(
+      @JsonProperty("name") String name,
+      @JsonProperty("path") String path,
+      @JsonProperty("creationTime") long creationTime,
+      @JsonProperty("lastModifiedTime") long lastModifiedTime,
+      @JsonProperty("directory") boolean directory,
+      @JsonProperty("file") boolean file,
+      @JsonProperty("size") long size,
       @JsonProperty("copies") Map<String, String> copies) {
     this.name = name;
     this.path = path;
     this.creationTime = creationTime;
-    this.lastAccessTime = lastAccessTime;
     this.lastModifiedTime = lastModifiedTime;
     this.directory = directory;
-    this.other = other;
-    this.regularFile = regularFile;
-    this.symbolicLink = symbolicLink;
+    this.file = file;
     this.size = size;
     this.copies = copies;
   }
@@ -88,24 +86,22 @@ public class FileMetadata {
    */
   private void setAttributes(BasicFileAttributes attr) {
     creationTime = attr.creationTime().toMillis();
-    lastAccessTime = attr.lastAccessTime().toMillis();
     lastModifiedTime = attr.lastModifiedTime().toMillis();
     directory = attr.isDirectory();
-    other = attr.isOther();
-    regularFile = attr.isRegularFile();
-    symbolicLink = attr.isSymbolicLink();
+    file = attr.isRegularFile();
     size = attr.size();
   }
 
   /**
    * Add another location this file is stored.
+   * 
    * @param place
    * @param path
    */
   public void addCopy(String place, String path) {
     copies.put(place, path);
   }
-  
+
   /* Getters and Setters (for Jackson) */
   public String getName() {
     return name;
@@ -131,14 +127,6 @@ public class FileMetadata {
     this.creationTime = creationTime;
   }
 
-  public long getLastAccessTime() {
-    return lastAccessTime;
-  }
-
-  public void setLastAccessTime(long lastAccessTime) {
-    this.lastAccessTime = lastAccessTime;
-  }
-
   public long getLastModifiedTime() {
     return lastModifiedTime;
   }
@@ -155,28 +143,12 @@ public class FileMetadata {
     this.directory = directory;
   }
 
-  public boolean isOther() {
-    return other;
+  public boolean isFile() {
+    return file;
   }
 
-  public void setOther(boolean other) {
-    this.other = other;
-  }
-
-  public boolean isRegularFile() {
-    return regularFile;
-  }
-
-  public void setRegularFile(boolean regularFile) {
-    this.regularFile = regularFile;
-  }
-
-  public boolean isSymbolicLink() {
-    return symbolicLink;
-  }
-
-  public void setSymbolicLink(boolean symbolicLink) {
-    this.symbolicLink = symbolicLink;
+  public void setFile(boolean file) {
+    this.file = file;
   }
 
   public long getSize() {

@@ -8,7 +8,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.log4j.Logger;
 
-import storage.RESTDropbox;
+import storage.dropbox.RESTDropbox;
 
 /**
  * This simple web application has no user log in or authentication. If it did this path should be changed to /user/{user_name}. Rather than simply supplying the access token it

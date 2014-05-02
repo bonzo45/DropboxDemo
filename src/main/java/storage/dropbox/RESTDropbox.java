@@ -1,4 +1,4 @@
-package storage;
+package storage.dropbox;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -6,18 +6,25 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.AccessDeniedException;
 import java.security.ProviderException;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
 import models.AccountDetails;
+import models.FileMetadata;
 
 import org.apache.log4j.Logger;
+
+import storage.CloudFileStore;
+import storage.DoNotCommitToGitHub;
+import storage.SamFile;
 
 import com.dropbox.core.DbxAccountInfo;
 import com.dropbox.core.DbxAppInfo;
 import com.dropbox.core.DbxClient;
+import com.dropbox.core.DbxEntry;
 import com.dropbox.core.DbxException;
 import com.dropbox.core.DbxRequestConfig;
 import com.dropbox.core.DbxSessionStore;
@@ -121,7 +128,7 @@ public class RESTDropbox implements CloudFileStore {
       String error = "Dropbox Upload: Could not read file. " + e.getMessage();
       LOG.error(error, e);
       throw e;
-      
+
     } catch (DbxException e) {
       String error = "Dropbox Upload: Dropbox returned an error. " + e.getMessage();
       LOG.error(error, e);
@@ -155,29 +162,26 @@ public class RESTDropbox implements CloudFileStore {
     OutputStream outputStream = null;
 
     try {
-      // Attempt to open file
-      outputStream = dest.getOutputStream();
-      // Attempt to download
-      client.getFile(source.getFullPath(), null, outputStream);
+      // Download File
+      client.getFile(source.getFullPath(), null, dest.getOutputStream());
+      // Download Metadata
+      dest.setMetadata(downloadMetadata(source.getFullPath()));
       LOG.info("Download Successful");
 
     } catch (FileNotFoundException e) {
       String error = "File may be a directory or could not be created/opened: " + dest;
       LOG.error(error, e);
       throw e;
-      // return Response.status(404).entity(error).build();
 
     } catch (DbxException e) {
       String error = "Dropbox returned an error.";
       LOG.error(error, e);
       throw new ProviderException(error);
-      // return Response.status(500).entity(error).build();
 
     } catch (IOException e) {
       String error = "Could not write to file: " + dest;
       LOG.error(error, e);
       throw e;
-      // return Response.status(500).entity(error).build();
 
     } finally {
       try {
@@ -192,12 +196,12 @@ public class RESTDropbox implements CloudFileStore {
   }
 
   /**
-   * Returns the link to redirect the use to to authorise them with the app.
+   * Returns the link to redirect the user to authorise them with the app.
    * 
    * @param session
-   *          - the HTTP Session. Why on earth does it need this?
+   *          - the HTTP Session. Used as a state.
    * @param sessionKey
-   *          - not sure what this even is...
+   *          - token stored under this name.
    * @param returnURI
    *          - Where the user is returned to after authenticating.
    * @return
@@ -217,7 +221,7 @@ public class RESTDropbox implements CloudFileStore {
    * @param parameterMap
    *          - a map from String to String[] containing "state" and "code" where state is used for CSRF detection and code is the authentication code.
    * @return
-   * @throws com.dropbox.core.DbxWebAuth.ProviderException 
+   * @throws com.dropbox.core.DbxWebAuth.ProviderException
    * @throws DbxException
    * @throws ProviderException
    * @throws NotApprovedException
@@ -225,7 +229,32 @@ public class RESTDropbox implements CloudFileStore {
    * @throws BadStateException
    * @throws BadRequestException
    */
-  public String getAccessTokenRedirect(Map<String, String[]> parameterMap) throws BadRequestException, BadStateException, CsrfException, NotApprovedException, com.dropbox.core.DbxWebAuth.ProviderException, DbxException {
+  public String getAccessTokenRedirect(Map<String, String[]> parameterMap) throws BadRequestException, BadStateException, CsrfException, NotApprovedException,
+      com.dropbox.core.DbxWebAuth.ProviderException, DbxException {
     return webAuth.finish(parameterMap).accessToken;
+  }
+
+  /**
+   * Downloads and Converts Dropbox Metadata to Uniform Metadata
+   * 
+   * @param entry
+   * @return
+   */
+  public FileMetadata downloadMetadata(String fullPath) throws DbxException {
+    // Download the Metadata
+    DbxEntry entry = client.getMetadata(fullPath);
+    
+    // Build FileMetadata from response.
+    FileMetadata result = new FileMetadata(entry.name, entry.path);
+    result.setFile(entry.isFile());
+    result.setDirectory(entry.isFolder());
+    DbxEntry.File fileEntry = entry.asFile();
+    result.setLastModifiedTime(fileEntry.lastModified.getTime());
+    
+    // Add to the metadata that the file is stored in Dropbox.
+    Map<String, String> copies = new HashMap<String, String>();
+    copies.put("dropbox", fullPath);
+    
+    return result;
   }
 }

@@ -1,20 +1,25 @@
-package storage;
+package storage.dropbox;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
+import models.FileMetadata;
+import storage.SamFile;
+import storage.local.SamLocalFile;
 import util.FileUtil;
 
 public class SamDropboxFile extends SamFile {
 
-  private String fileName;
-  private String filePath;
+  private static Logger LOG = Logger.getLogger(SamLocalFile.class);
   
   public SamDropboxFile(String relativeFilePath) {
-    this.fileName = FileUtil.extractName(relativeFilePath);
-    this.filePath = FileUtil.extractPath(relativeFilePath);
+    String fileName = FileUtil.extractName(relativeFilePath);
+    String filePath = FileUtil.extractPath(relativeFilePath);
+    metadata = new FileMetadata(fileName, filePath);
   }
   
   @Override
@@ -28,22 +33,8 @@ public class SamDropboxFile extends SamFile {
   }
 
   @Override
-  public String getFileName() {
-    return fileName;
-  }
-
-  @Override
-  public String getFilePath() {
-    return filePath;
-  }
-
-  @Override
   public void addCopy(String place, String path) {
     throw new UnsupportedOperationException();
   }
 
-  @Override
-  public void generateMetadata(Map<String, String> copies) {
-    throw new UnsupportedOperationException();
-  }
 }
