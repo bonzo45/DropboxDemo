@@ -1,7 +1,5 @@
 package handlers;
 
-import jackson.JsonConverter;
-
 import java.io.InputStream;
 
 import javax.ws.rs.Consumes;
@@ -47,13 +45,14 @@ public class FileController {
    */
   @GET
   @Produces(MediaType.APPLICATION_JSON)
-  public String getFile(@PathParam("file_path") String filePath) {
+  public Response getFile(@PathParam("file_path") String filePath) {
     LOG.info("File Information Requested: " + filePath);
 
     LocalStorage localStore = new LocalStorage();
-    SamFile file = localStore.getFile(filePath);
+    LocalWebMediatorInterface mediator = new LocalWebMediator(localStore);
+    Response response = mediator.getFile(filePath);
 
-    return JsonConverter.getJSONString(file.getMetadata());
+    return response;
   }
 
   /**

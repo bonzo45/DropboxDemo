@@ -1,6 +1,6 @@
  var FileModel = Backbone.Model.extend({
 	// URL used to fetch models of this type from the server.
-	urlRoot: 'dropbox/files',
+	urlRoot: URL_FILE,
 	
 	// Default Values
 	defaults: {

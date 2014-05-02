@@ -9,6 +9,8 @@ import javax.ws.rs.core.Response;
 
 import org.apache.log4j.Logger;
 
+import mediator.LocalWebMediator;
+import mediator.LocalWebMediatorInterface;
 import models.DirectoryMetadata;
 import storage.local.LocalStorage;
 
@@ -27,14 +29,11 @@ public class DirectoryController {
   @GET
   @Path("{directory}")
   @Produces(MediaType.APPLICATION_JSON)
-  public Response getFiles(@PathParam("directory") String directoryString) {
-    DirectoryMetadata directory = LocalStorage.getDirectory(directoryString);
-
-    // If the directory is invalid
-    if (directory == null) {
-      return Response.status(404).entity("{error: \"Invalid Directory\"}").build();
-    }
-
-    return Response.ok(directory.toJSON()).build();
+  public Response getDirectory(@PathParam("directory") String path) {
+    LocalStorage localStore = new LocalStorage();
+    LocalWebMediatorInterface mediator = new LocalWebMediator(localStore);
+    // TODO on Tuesday: Create this method!
+    Response response = mediator.getDirectory(path);
+    return response;
   }
 }

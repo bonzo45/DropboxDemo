@@ -1,5 +1,7 @@
 package mediator;
 
+import jackson.JsonConverter;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,7 +13,6 @@ import javax.ws.rs.core.Response;
 import models.FileMetadata;
 import storage.LocalFileStore;
 import storage.SamFile;
-import storage.local.SamLocalFile;
 
 public class LocalWebMediator implements LocalWebMediatorInterface {
 
@@ -44,22 +45,43 @@ public class LocalWebMediator implements LocalWebMediatorInterface {
 
   @Override
   public Response persistMetadata(SamFile file) {
-      try {
-        storage.persistMetadata(file);
-        return Response.ok().build();
-        
-      } catch (AccessDeniedException e) {
-        return Response.status(500).build();
-        
-      } catch (FileNotFoundException e) {
-        return Response.status(404).build();
-        
-      } catch (ProviderException e) {
-        return Response.status(500).build();
-        
-      } catch (IOException e) {
-        return Response.status(500).build();
-        
-      }
+    try {
+      storage.persistMetadata(file);
+      return Response.ok().build();
+
+    } catch (AccessDeniedException e) {
+      return Response.status(500).build();
+
+    } catch (FileNotFoundException e) {
+      return Response.status(404).build();
+
+    } catch (ProviderException e) {
+      return Response.status(500).build();
+
+    } catch (IOException e) {
+      return Response.status(500).build();
+
+    }
+  }
+
+  @Override
+  public Response getFile(String filePath) {
+    try {
+      SamFile file = storage.getFile(filePath);
+      String content = JsonConverter.getJSONString(file.getMetadata());
+      return Response.ok().entity(content).build();
+      
+    } catch (AccessDeniedException e) {
+      return Response.status(500).build();
+
+    } catch (FileNotFoundException e) {
+      return Response.status(404).build();
+
+    } catch (ProviderException e) {
+      return Response.status(500).build();
+
+    } catch (IOException e) {
+      return Response.status(500).build();
+    }
   }
 }
