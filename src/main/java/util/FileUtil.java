@@ -23,6 +23,10 @@ public class FileUtil {
    */
   public static String extractPath(String filePath) {
     File f = new File(filePath);
-    return f.getPath();
+    String result = f.getParent();
+    if (result == null) {
+      return "";
+    }
+    return result;
   }
 }

@@ -21,7 +21,7 @@ import com.dropbox.core.DbxWebAuth.CsrfException;
 import com.dropbox.core.DbxWebAuth.NotApprovedException;
 import com.dropbox.core.DbxWebAuth.ProviderException;
 
-@Path("/")
+@Path("")
 public class Root {
 
   private static Logger LOG = Logger.getLogger(Root.class);

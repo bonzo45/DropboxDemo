@@ -7,14 +7,14 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.apache.log4j.Logger;
-
 import mediator.LocalWebMediator;
 import mediator.LocalWebMediatorInterface;
-import models.DirectoryMetadata;
+
+import org.apache.log4j.Logger;
+
 import storage.local.LocalStorage;
 
-@Path("/directory")
+@Path("directory")
 public class DirectoryController {
 
   private static Logger LOG = Logger.getLogger(DirectoryController.class);
@@ -27,12 +27,12 @@ public class DirectoryController {
    * @return
    */
   @GET
-  @Path("{directory}")
+  @Path("{directory: .*}")
   @Produces(MediaType.APPLICATION_JSON)
   public Response getDirectory(@PathParam("directory") String path) {
+    LOG.info("Directory Requested: " + path);
     LocalStorage localStore = new LocalStorage();
     LocalWebMediatorInterface mediator = new LocalWebMediator(localStore);
-    // TODO on Tuesday: Create this method!
     Response response = mediator.getDirectory(path);
     return response;
   }

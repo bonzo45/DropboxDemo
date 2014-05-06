@@ -112,7 +112,6 @@ public class LocalStorage extends LocalFileStore {
     }
   }
 
-  /* DIRECTORY STUFF NOT REFACTORED YET */
   /**
    * Returns information about all files in a directory.
    * 
@@ -126,7 +125,7 @@ public class LocalStorage extends LocalFileStore {
 
     // If this directory is not valid, return null
     if (listOfFiles == null) {
-      LOG.error("Directory invalid: " + directoryPath);
+      LOG.error("Could not read from directory: " + directoryPath);
       return null;
     }
 
@@ -138,7 +137,7 @@ public class LocalStorage extends LocalFileStore {
 
       // If it's not hidden or metadata, add it to the list.
       if (!fileName.endsWith(METADATA_SUFFIX) && !fileName.startsWith(".")) {
-        // directoryModel.addFile(getFile(file.getName()));
+         directoryModel.addFile(getFile(file.getName()).getMetadata());
       }
     }
 

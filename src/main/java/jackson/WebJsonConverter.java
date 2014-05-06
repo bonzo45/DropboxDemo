@@ -2,22 +2,31 @@ package jackson;
 
 import java.io.IOException;
 
+import models.FileMetadata;
+
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 
-public class JsonConverter {
+public class WebJsonConverter {
 
-  private static final ObjectMapper JSON_CONVERTER = new ObjectMapper();
+  private final ObjectMapper JSON_CONVERTER = new ObjectMapper();
 
+  public WebJsonConverter() {
+    SimpleModule module = new SimpleModule();
+    module.addSerializer(FileMetadata.class, new SamsFileSerializer());
+    JSON_CONVERTER.registerModule(module);
+  }
+  
   /**
    * Returns a JSON string representation of the given object.
    * 
    * @param object
    * @return
    */
-  public static final <T> String getJSONString(T object) {
+  public final <T> String getJSONString(T object) {
     try {
       String string = JSON_CONVERTER.writeValueAsString(object);
       return string;
@@ -38,7 +47,7 @@ public class JsonConverter {
    * @param clazz
    * @return
    */
-  public static final <T> T getObjectFromJson(String string, Class<T> clazz) {
+  public final <T> T getObjectFromJson(String string, Class<T> clazz) {
     try {
       T object = JSON_CONVERTER.readValue(string, clazz);
       return object;

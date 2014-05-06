@@ -22,7 +22,7 @@
         if (directory) {
             print('<i class="fa fa-folder"></i>')
         }
-        else if (regularFile) {
+        else if (file) {
            print('<i class="fa fa-file"></i>')
         }        
         else {

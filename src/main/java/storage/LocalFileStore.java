@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.nio.file.AccessDeniedException;
 import java.security.ProviderException;
 
+import models.DirectoryMetadata;
 import models.FileMetadata;
 
 public abstract class LocalFileStore {
@@ -42,7 +43,7 @@ public abstract class LocalFileStore {
   public abstract SamFile getFile(String filePath) throws FileNotFoundException, AccessDeniedException, IOException, ProviderException;
 
   /**
-   * Sets metadata of file and calls persistMetadata() to store permanantly.
+   * Sets metadata of file and calls persistMetadata() to store permanently.
    * 
    * @param file
    * @param metadata
@@ -54,6 +55,5 @@ public abstract class LocalFileStore {
   
   public abstract void persistMetadata(SamFile file) throws FileNotFoundException, AccessDeniedException, IOException, ProviderException;
 
-  // TODO: Directory things....
-  // public SamDirectory getDirectory(String path);
+  public abstract DirectoryMetadata getDirectory(String path) throws FileNotFoundException, AccessDeniedException, IOException, ProviderException;
 }

@@ -20,7 +20,7 @@ import storage.dropbox.RESTDropbox;
  * All of the handlers required for authenticating a Dropbox account with this web application.
  * 
  */
-@Path("/auth")
+@Path("auth")
 public class AuthorisationController {
 
   private static Logger LOG = Logger.getLogger(RESTDropbox.class);

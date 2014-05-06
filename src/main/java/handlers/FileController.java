@@ -1,6 +1,7 @@
 package handlers;
 
 import java.io.InputStream;
+import java.util.Date;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -31,7 +32,7 @@ import storage.local.LocalStorage;
 import storage.local.SamLocalFile;
 import util.ResponseUtil;
 
-@Path("/files/{file_path}")
+@Path("files/{file_path}")
 public class FileController {
 
   private static Logger LOG = Logger.getLogger(FileController.class);
@@ -75,8 +76,16 @@ public class FileController {
     // Build metadata
     FileMetadata metadata = new FileMetadata(filePath);
     metadata.setSize(fileDetails.getSize());
-    metadata.setCreationTime(fileDetails.getCreationDate().getTime());
-    metadata.setLastModifiedTime(fileDetails.getModificationDate().getTime());
+    Date creationDate = fileDetails.getCreationDate();
+    if (creationDate != null) {
+      metadata.setCreationTime(creationDate.getTime());
+    }
+    Date modifiedDate = fileDetails.getModificationDate();
+    if (modifiedDate != null) {
+      metadata.setLastModifiedTime(modifiedDate.getTime());
+    }
+    metadata.setFile(true);
+    metadata.setDirectory(false);
 
     return mediator.newFile(filePath, fileInputStream, metadata);
   }

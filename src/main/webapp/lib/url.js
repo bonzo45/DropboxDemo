@@ -7,8 +7,8 @@ const URL_ROOT = "/DropboxDemo/dropbox/";
   const URL_USER_DETAILS = URL_ROOT + "account_details";
   
   const URL_FILE = URL_ROOT + "files/";
-  const URL_FILE_TO_DROPBOX_SUFFIX = "to_dropbox";
-  const URL_FILE_FROM_DROPBOX_SUFFIX = "from_dropbox";
+  const URL_FILE_TO_DROPBOX_SUFFIX = "/to_dropbox";
+  const URL_FILE_FROM_DROPBOX_SUFFIX = "/from_dropbox";
   
   const URL_DIRECTORY = URL_ROOT + "directory/";
     

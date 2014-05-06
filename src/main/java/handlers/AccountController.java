@@ -15,7 +15,7 @@ import storage.dropbox.RESTDropbox;
  * could be looked up from the user name.
  * 
  */
-@Path("/account_details")
+@Path("account_details")
 public class AccountController {
 
   private static Logger LOG = Logger.getLogger(Root.class);
@@ -29,6 +29,7 @@ public class AccountController {
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   public String getAccountDetails(@QueryParam("access_token") String accessToken) {
+    LOG.info("Account Requested: " + accessToken);
     RESTDropbox dropbox = new RESTDropbox(accessToken);
     return dropbox.getAccountDetails().toJson();
   }

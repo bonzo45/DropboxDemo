@@ -7,15 +7,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import models.FileMetadata;
-
-import org.apache.log4j.Logger;
-
 import storage.SamFile;
 import util.FileUtil;
 
 public class SamLocalFile extends SamFile {
-
-  private static Logger LOG = Logger.getLogger(SamLocalFile.class);
 
   public SamLocalFile(String relativePath) {
     String fileName = FileUtil.extractName(relativePath);

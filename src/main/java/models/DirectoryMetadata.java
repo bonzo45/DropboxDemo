@@ -5,6 +5,9 @@ import jackson.JsonConverter;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * An object storing the information associated with a Directory (a list of files).
  */
@@ -17,6 +20,11 @@ public class DirectoryMetadata {
     files = new ArrayList<FileMetadata>();
   }
 
+  @JsonCreator
+  public DirectoryMetadata(@JsonProperty("files") List<FileMetadata> files) {
+    this.files = files;
+  }
+  
   /**
    * Add a file to this model.
    * 
@@ -43,6 +51,15 @@ public class DirectoryMetadata {
     }
 
     return "[" + result.substring(0, result.length() - 1) + "]";
+  }
+
+  
+  public List<FileMetadata> getFiles() {
+    return files;
+  }
+
+  public void setFiles(List<FileMetadata> files) {
+    this.files = files;
   }
 
 }

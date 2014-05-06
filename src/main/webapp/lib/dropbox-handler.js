@@ -23,8 +23,8 @@ function setupChooser() {
 			var matches = regex.exec(files[0].link);
 			var path = matches[2];
 			var accessToken = $("#access_token").val();
-			var urlToContact = "dropbox/files/" + path
-					+ "/from_dropbox" + "?access_token=" + accessToken;
+			var urlToContact = URL_FILE + path
+					+ URL_FILE_TO_DROPBOX_SUFFIX + "?access_token=" + accessToken;
 			$.ajax({
 				type : "PUT",
 				url : urlToContact,

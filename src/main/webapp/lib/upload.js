@@ -3,7 +3,7 @@ function uploadFile() {
 	var fileObj = $("#upload_file_field");
 	var filePath = fileObj.val();
 	var fileName = filePath.split("\\").pop();
-	var formURL = "dropbox/files/" + fileName;
+	var formURL = URL_FILE + fileName;
 	
 	/* Build FormData object using the file field */
 	var formData = new FormData();

@@ -1,6 +1,7 @@
 package mediator;
 
 import jackson.JsonConverter;
+import jackson.WebJsonConverter;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -10,6 +11,7 @@ import java.security.ProviderException;
 
 import javax.ws.rs.core.Response;
 
+import models.DirectoryMetadata;
 import models.FileMetadata;
 import storage.LocalFileStore;
 import storage.SamFile;
@@ -69,6 +71,28 @@ public class LocalWebMediator implements LocalWebMediatorInterface {
     try {
       SamFile file = storage.getFile(filePath);
       String content = JsonConverter.getJSONString(file.getMetadata());
+      return Response.ok().entity(content).build();
+
+    } catch (AccessDeniedException e) {
+      return Response.status(500).build();
+
+    } catch (FileNotFoundException e) {
+      return Response.status(404).build();
+
+    } catch (ProviderException e) {
+      return Response.status(500).build();
+
+    } catch (IOException e) {
+      return Response.status(500).build();
+    }
+  }
+
+  @Override
+  public Response getDirectory(String path) {
+    try {
+      DirectoryMetadata metadata = storage.getDirectory(path);
+      WebJsonConverter converter = new WebJsonConverter();
+      String content = converter.getJSONString(metadata);
       return Response.ok().entity(content).build();
       
     } catch (AccessDeniedException e) {
