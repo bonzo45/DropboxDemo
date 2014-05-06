@@ -12,7 +12,6 @@ function getAccountDetails() {
 	$.getJSON("dropbox/account_details", {
 		"access_token" : access_token
 	}, function(data) {
-		alert("Got the callback... obviously...")
 		var account_details_div = $("#account_details");
 		account_details_div.html(data.id + " - " + data.name + " ("
 				+ data.country + ")");
