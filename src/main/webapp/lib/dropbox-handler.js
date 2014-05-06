@@ -2,13 +2,19 @@ function dropboxInit() {
 	setupChooser();
 }
 
+function redirectToDropbox() {
+	$("#redirect_form").attr("action", URL_REDIRECT_TO_DROPBOX);
+	$("#redirect_form")[0].submit();
+}
+
 function getAccountDetails() {
 	var access_token = $("#access_token").val();
 	$.getJSON("dropbox/account_details", {
 		"access_token" : access_token
 	}, function(data) {
+		alert("Got the callback... obviously...")
 		var account_details_div = $("#account_details");
-		account_details_div.html(data.user_id + " - " + data.name + " ("
+		account_details_div.html(data.id + " - " + data.name + " ("
 				+ data.country + ")");
 	});
 
@@ -24,7 +30,7 @@ function setupChooser() {
 			var path = matches[2];
 			var accessToken = $("#access_token").val();
 			var urlToContact = URL_FILE + path
-					+ URL_FILE_TO_DROPBOX_SUFFIX + "?access_token=" + accessToken;
+					+ URL_FILE_FROM_DROPBOX_SUFFIX + "?access_token=" + accessToken;
 			$.ajax({
 				type : "PUT",
 				url : urlToContact,

@@ -40,5 +40,14 @@ public abstract class SamFile {
   public String toString() {
     return getFullPath();
   }
+
+  public void setIndependentMetadata(FileMetadata metadata) {
+    this.metadata.setCopies(metadata.getCopies());
+    this.metadata.setCreationTime(metadata.getCreationTime());
+    this.metadata.setDirectory(metadata.isDirectory());
+    this.metadata.setFile(metadata.isFile());
+    this.metadata.setLastModifiedTime(metadata.getLastModifiedTime());
+    this.metadata.setSize(metadata.getSize());
+  }
   
 }

@@ -20,6 +20,7 @@ import org.apache.log4j.Logger;
 import storage.CloudFileStore;
 import storage.DoNotCommitToGitHub;
 import storage.SamFile;
+import util.FileUtil;
 
 import com.dropbox.core.DbxAccountInfo;
 import com.dropbox.core.DbxAppInfo;
@@ -165,7 +166,7 @@ public class RESTDropbox implements CloudFileStore {
       // Download File
       client.getFile(source.getFullPath(), null, dest.getOutputStream());
       // Download Metadata
-      dest.setMetadata(downloadMetadata(source.getFullPath()));
+      dest.setIndependentMetadata(downloadMetadata(source.getFullPath()));
       LOG.info("Download Successful");
 
     } catch (FileNotFoundException e) {
@@ -245,7 +246,7 @@ public class RESTDropbox implements CloudFileStore {
     DbxEntry entry = client.getMetadata(fullPath);
     
     // Build FileMetadata from response.
-    FileMetadata result = new FileMetadata(entry.name, entry.path);
+    FileMetadata result = new FileMetadata(entry.name, FileUtil.extractPath(entry.path));
     result.setFile(entry.isFile());
     result.setDirectory(entry.isFolder());
     DbxEntry.File fileEntry = entry.asFile();
@@ -254,6 +255,7 @@ public class RESTDropbox implements CloudFileStore {
     // Add to the metadata that the file is stored in Dropbox.
     Map<String, String> copies = new HashMap<String, String>();
     copies.put("dropbox", fullPath);
+    result.setCopies(copies);
     
     return result;
   }

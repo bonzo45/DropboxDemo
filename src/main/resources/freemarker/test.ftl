@@ -101,7 +101,7 @@
   
   <h1>Sam's Incredible Demonstration</h1>
   
-  <form id="redirect_form" action="auth/redirect_to_dropbox">
+  <form id="redirect_form" onSubmit="return redirectToDropbox()">
     <button type="submit" name="done" class="redirect_button">Click to Authenticate</button>
   </form>
   

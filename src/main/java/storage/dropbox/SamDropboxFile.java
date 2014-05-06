@@ -12,7 +12,7 @@ public class SamDropboxFile extends SamFile {
   
   public SamDropboxFile(String relativeFilePath) {
     String fileName = FileUtil.extractName(relativeFilePath);
-    String filePath = FileUtil.extractPath(relativeFilePath);
+    String filePath = "/" + FileUtil.extractPath(relativeFilePath);
     metadata = new FileMetadata(fileName, filePath);
   }
   

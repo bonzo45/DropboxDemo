@@ -106,7 +106,7 @@ public class FileController {
     CloudFileStore dropbox = new RESTDropbox(accessToken);
     CloudWebMediatorInterface mediator = new CloudWebMediator(dropbox);
 
-    SamFile source = new SamLocalFile(filePath);
+    SamFile source = localStore.getFile(filePath);
     SamFile dest = new SamDropboxFile(filePath);
     Response response = mediator.upload(source, dest);
 
