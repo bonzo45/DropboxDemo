@@ -1,4 +1,4 @@
-package models;
+package model;
 
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashMap;

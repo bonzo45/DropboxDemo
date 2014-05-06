@@ -2,7 +2,9 @@ package jackson;
 
 import java.io.IOException;
 
-import models.FileMetadata;
+import model.FileMetadata;
+
+import org.apache.log4j.Logger;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonParseException;
@@ -12,11 +14,13 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 
 public class WebJsonConverter {
 
+  private static Logger LOG = Logger.getLogger(WebJsonConverter.class);
+  
   private final ObjectMapper JSON_CONVERTER = new ObjectMapper();
 
   public WebJsonConverter() {
     SimpleModule module = new SimpleModule();
-    module.addSerializer(FileMetadata.class, new SamsFileSerializer());
+    module.addSerializer(FileMetadata.class, new WebFileSerializer());
     JSON_CONVERTER.registerModule(module);
   }
   
@@ -31,11 +35,11 @@ public class WebJsonConverter {
       String string = JSON_CONVERTER.writeValueAsString(object);
       return string;
     } catch (JsonGenerationException e) {
-      System.err.println("could not generate JSON for " + object);
+      LOG.error("Could not generate JSON: " + object, e);
     } catch (JsonMappingException e) {
-      System.err.println("could not map object to JSON for " + object);
+      LOG.error("Could not map object to JSON: " + object, e);
     } catch (IOException e) {
-      System.err.println("an error occurred while jsonising object " + object);
+      LOG.error("An error occurred while JSONising object: " + object, e);
     }
     return null;
   }
@@ -52,11 +56,11 @@ public class WebJsonConverter {
       T object = JSON_CONVERTER.readValue(string, clazz);
       return object;
     } catch (JsonParseException e) {
-      System.err.println("Could not recover object from string " + string);
+      LOG.error("Could not recover object from string: " + string, e);
     } catch (JsonMappingException e) {
-      System.err.println("Could not recover object from string " + string);
+      LOG.error("Could not map object from string: " + string, e);
     } catch (IOException e) {
-      System.err.println("An error occurred while recovering object from " + string);
+      LOG.error("An error occurred while recovering: " + string, e);
     }
     return null;
   }

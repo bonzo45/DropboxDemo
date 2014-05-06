@@ -1,6 +1,6 @@
-package models;
+package model;
 
-import jackson.JsonConverter;
+import jackson.StockJsonConverter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +42,7 @@ public class DirectoryMetadata {
   public String toJSON() {
     String result = "";
     for (FileMetadata file : files) {
-      result += JsonConverter.getJSONString(file);
+      result += StockJsonConverter.getJSONString(file);
       result += ",";
     }
 

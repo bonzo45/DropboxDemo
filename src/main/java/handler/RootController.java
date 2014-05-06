@@ -1,4 +1,4 @@
-package handlers;
+package handler;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -12,7 +12,7 @@ import javax.ws.rs.core.Response;
 import org.apache.log4j.Logger;
 import org.glassfish.jersey.server.mvc.Viewable;
 
-import storage.dropbox.RESTDropbox;
+import storage.cloud.dropbox.Dropbox;
 
 import com.dropbox.core.DbxException;
 import com.dropbox.core.DbxWebAuth.BadRequestException;
@@ -22,9 +22,9 @@ import com.dropbox.core.DbxWebAuth.NotApprovedException;
 import com.dropbox.core.DbxWebAuth.ProviderException;
 
 @Path("")
-public class Root {
+public class RootController {
 
-  private static Logger LOG = Logger.getLogger(Root.class);
+  private static Logger LOG = Logger.getLogger(RootController.class);
 
   /**
    * When the user returns from Dropbox Authentication they are sent here.
@@ -42,7 +42,7 @@ public class Root {
     // If returning from Dropbox authentication
     if (token != null && authenticationCode != null) {
       // Retrieve the Dropbox 'State' from storage.
-      RESTDropbox dropbox = AuthorisationController.dbxStates.remove(1);
+      Dropbox dropbox = AuthorisationController.dbxStates.remove(1);
 
       // Reconstruct the parameter map - Jersey consumed it :-(
       HashMap<String, String[]> hashMap = new HashMap<String, String[]>();

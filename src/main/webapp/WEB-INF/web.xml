@@ -13,13 +13,13 @@
 		<!-- Where are the resource handlers? -->
 		<init-param>
 			<param-name>jersey.config.server.provider.packages</param-name>
-			<param-value>handlers</param-value>
+			<param-value>handler</param-value>
 		</init-param>
 
 		<!-- Where is the 'application'? -->
 		<init-param>
 			<param-name>javax.ws.rs.Application</param-name>
-			<param-value>application.DemoApplication</param-value>
+			<param-value>application.SamsApplication</param-value>
 		</init-param>
 		
 		<!-- Where are our Freemarker templates? -->

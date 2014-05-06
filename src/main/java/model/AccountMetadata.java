@@ -1,12 +1,12 @@
-package models;
+package model;
 
-public class AccountDetails {
+public class AccountMetadata {
 
   private long id;
   private String name;
   private String country;
 
-  public AccountDetails(long id, String name, String country) {
+  public AccountMetadata(long id, String name, String country) {
     this.id = id;
     this.name = name;
     this.country = country;

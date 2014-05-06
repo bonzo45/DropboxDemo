@@ -1,4 +1,4 @@
-package storage;
+package storage.local;
 
 public class LocalFile {
 

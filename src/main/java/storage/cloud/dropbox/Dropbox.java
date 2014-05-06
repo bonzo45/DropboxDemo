@@ -1,4 +1,4 @@
-package storage.dropbox;
+package storage.cloud.dropbox;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -12,15 +12,15 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
-import models.AccountDetails;
-import models.FileMetadata;
+import model.AccountMetadata;
+import model.FileMetadata;
 
 import org.apache.log4j.Logger;
 
-import storage.CloudFileStore;
-import storage.DoNotCommitToGitHub;
 import storage.SamFile;
+import storage.cloud.CloudFileStore;
 import util.FileUtil;
+import application.DoNotCommitToGitHub;
 
 import com.dropbox.core.DbxAccountInfo;
 import com.dropbox.core.DbxAppInfo;
@@ -37,9 +37,9 @@ import com.dropbox.core.DbxWebAuth.CsrfException;
 import com.dropbox.core.DbxWebAuth.NotApprovedException;
 import com.dropbox.core.DbxWriteMode;
 
-public class RESTDropbox implements CloudFileStore {
+public class Dropbox implements CloudFileStore {
 
-  private static Logger LOG = Logger.getLogger(RESTDropbox.class);
+  private static Logger LOG = Logger.getLogger(Dropbox.class);
 
   // Configuration
   private DbxAppInfo appInfo;
@@ -55,7 +55,7 @@ public class RESTDropbox implements CloudFileStore {
   /**
    * Create a Dropbox instance with no access code. Use this constructor to set up authentication with a new user.
    */
-  public RESTDropbox() {
+  public Dropbox() {
     appInfo = new DbxAppInfo(DoNotCommitToGitHub.APP_KEY, DoNotCommitToGitHub.APP_SECRET);
     config = new DbxRequestConfig(DoNotCommitToGitHub.APP_NAME, Locale.getDefault().toString());
   }
@@ -65,7 +65,7 @@ public class RESTDropbox implements CloudFileStore {
    * 
    * @param accessToken
    */
-  public RESTDropbox(String accessToken) {
+  public Dropbox(String accessToken) {
     this();
     setupClient(accessToken);
   }
@@ -85,11 +85,11 @@ public class RESTDropbox implements CloudFileStore {
    * 
    * @return
    */
-  public AccountDetails getAccountDetails() {
-    AccountDetails info = null;
+  public AccountMetadata getAccountDetails() {
+    AccountMetadata info = null;
     try {
       DbxAccountInfo dropboxInfo = client.getAccountInfo();
-      info = new AccountDetails(dropboxInfo.userId, dropboxInfo.displayName, dropboxInfo.country);
+      info = new AccountMetadata(dropboxInfo.userId, dropboxInfo.displayName, dropboxInfo.country);
     } catch (DbxException e) {
       LOG.warn("Could not fetch Dropbox Account Details", e);
     }

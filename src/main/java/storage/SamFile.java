@@ -4,7 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import models.FileMetadata;
+import model.FileMetadata;
 
 public abstract class SamFile {
 
@@ -49,5 +49,5 @@ public abstract class SamFile {
     this.metadata.setLastModifiedTime(metadata.getLastModifiedTime());
     this.metadata.setSize(metadata.getSize());
   }
-  
+
 }

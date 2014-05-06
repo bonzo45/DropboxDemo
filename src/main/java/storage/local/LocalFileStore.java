@@ -1,4 +1,4 @@
-package storage;
+package storage.local;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -6,8 +6,9 @@ import java.io.InputStream;
 import java.nio.file.AccessDeniedException;
 import java.security.ProviderException;
 
-import models.DirectoryMetadata;
-import models.FileMetadata;
+import storage.SamFile;
+import model.DirectoryMetadata;
+import model.FileMetadata;
 
 public abstract class LocalFileStore {
 
@@ -48,12 +49,29 @@ public abstract class LocalFileStore {
    * @param file
    * @param metadata
    */
-  public void setMetadata(SamFile file, FileMetadata metadata) throws FileNotFoundException, AccessDeniedException, IOException, ProviderException{
+  public void setMetadata(SamFile file, FileMetadata metadata) throws FileNotFoundException, AccessDeniedException, IOException, ProviderException {
     file.setMetadata(metadata);
     persistMetadata(file);
   }
-  
+
+  /**
+   * Save the metadata of the file to permanent storage.
+   * @param file
+   * @throws FileNotFoundException
+   * @throws AccessDeniedException
+   * @throws IOException
+   * @throws ProviderException
+   */
   public abstract void persistMetadata(SamFile file) throws FileNotFoundException, AccessDeniedException, IOException, ProviderException;
 
+  /**
+   * Retrieves an existing directory.
+   * @param path
+   * @return
+   * @throws FileNotFoundException
+   * @throws AccessDeniedException
+   * @throws IOException
+   * @throws ProviderException
+   */
   public abstract DirectoryMetadata getDirectory(String path) throws FileNotFoundException, AccessDeniedException, IOException, ProviderException;
 }

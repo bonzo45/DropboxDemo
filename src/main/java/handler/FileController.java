@@ -1,4 +1,4 @@
-package handlers;
+package handler;
 
 import java.io.InputStream;
 import java.util.Date;
@@ -18,18 +18,18 @@ import mediator.CloudWebMediator;
 import mediator.CloudWebMediatorInterface;
 import mediator.LocalWebMediator;
 import mediator.LocalWebMediatorInterface;
-import models.FileMetadata;
+import model.FileMetadata;
 
 import org.apache.log4j.Logger;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
-import storage.CloudFileStore;
 import storage.SamFile;
-import storage.dropbox.RESTDropbox;
-import storage.dropbox.SamDropboxFile;
-import storage.local.LocalStorage;
-import storage.local.SamLocalFile;
+import storage.cloud.CloudFileStore;
+import storage.cloud.dropbox.Dropbox;
+import storage.cloud.dropbox.DropboxFile;
+import storage.local.disk.DiskStorage;
+import storage.local.disk.DiskFile;
 import util.ResponseUtil;
 
 @Path("files/{file_path}")
@@ -49,7 +49,7 @@ public class FileController {
   public Response getFile(@PathParam("file_path") String filePath) {
     LOG.info("File Information Requested: " + filePath);
 
-    LocalStorage localStore = new LocalStorage();
+    DiskStorage localStore = new DiskStorage();
     LocalWebMediatorInterface mediator = new LocalWebMediator(localStore);
     Response response = mediator.getFile(filePath);
 
@@ -70,7 +70,7 @@ public class FileController {
       @FormDataParam("file") InputStream fileInputStream,
       @FormDataParam("file") FormDataContentDisposition fileDetails,
       @PathParam("file_path") String filePath) {
-    LocalStorage localStore = new LocalStorage();
+    DiskStorage localStore = new DiskStorage();
     LocalWebMediatorInterface mediator = new LocalWebMediator(localStore);
 
     // Build metadata
@@ -101,13 +101,13 @@ public class FileController {
   @PUT
   @Path("to_dropbox")
   public Response serverToDropbox(@QueryParam("access_token") String accessToken, @PathParam("file_path") String filePath) {
-    LocalStorage localStore = new LocalStorage();
+    DiskStorage localStore = new DiskStorage();
     LocalWebMediatorInterface localMediator = new LocalWebMediator(localStore);
-    CloudFileStore dropbox = new RESTDropbox(accessToken);
+    CloudFileStore dropbox = new Dropbox(accessToken);
     CloudWebMediatorInterface mediator = new CloudWebMediator(dropbox);
 
     SamFile source = localStore.getFile(filePath);
-    SamFile dest = new SamDropboxFile(filePath);
+    SamFile dest = new DropboxFile(filePath);
     Response response = mediator.upload(source, dest);
 
     // If upload was successful, save metadata.
@@ -134,13 +134,13 @@ public class FileController {
   @PUT
   @Path("from_dropbox")
   public Response dropboxToServer(@QueryParam("access_token") String accessToken, @PathParam("file_path") String filePath) {
-    LocalStorage localStore = new LocalStorage();
+    DiskStorage localStore = new DiskStorage();
     LocalWebMediatorInterface localMediator = new LocalWebMediator(localStore);
-    CloudFileStore dropbox = new RESTDropbox(accessToken);
+    CloudFileStore dropbox = new Dropbox(accessToken);
     CloudWebMediatorInterface mediator = new CloudWebMediator(dropbox);
 
-    SamFile source = new SamDropboxFile(filePath);
-    SamFile dest = new SamLocalFile(filePath);
+    SamFile source = new DropboxFile(filePath);
+    SamFile dest = new DiskFile(filePath);
     Response response = mediator.download(source, dest);
 
     // If download successful, save metadata.

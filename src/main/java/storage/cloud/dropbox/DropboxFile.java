@@ -1,16 +1,10 @@
-package storage.dropbox;
+package storage.cloud.dropbox;
 
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.io.OutputStream;
-
-import models.FileMetadata;
-import storage.SamFile;
 import util.FileUtil;
 
-public class SamDropboxFile extends SamFile {
+public class DropboxFile {
   
-  public SamDropboxFile(String relativeFilePath) {
+  public DropboxFile(String relativeFilePath) {
     String fileName = FileUtil.extractName(relativeFilePath);
     String filePath = "/" + FileUtil.extractPath(relativeFilePath);
     metadata = new FileMetadata(fileName, filePath);

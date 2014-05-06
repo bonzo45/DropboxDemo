@@ -1,6 +1,6 @@
-package storage.local;
+package storage.local.disk;
 
-import jackson.JsonConverter;
+import jackson.StockJsonConverter;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -11,24 +11,24 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 
-import models.DirectoryMetadata;
-import models.FileMetadata;
+import model.DirectoryMetadata;
+import model.FileMetadata;
 
 import org.apache.log4j.Logger;
 
-import storage.LocalFileStore;
 import storage.SamFile;
+import storage.local.LocalFileStore;
 
-public class LocalStorage extends LocalFileStore {
+public class DiskStorage extends LocalFileStore {
 
-  private static Logger LOG = Logger.getLogger(LocalStorage.class);
+  private static Logger LOG = Logger.getLogger(DiskStorage.class);
 
   public static final String ROOT_PATH = "/Users/Sam/files/";
   public static final String METADATA_SUFFIX = ".meta";
 
   @Override
   public SamFile newFile(String filePath, InputStream inputStream) throws FileNotFoundException, IOException {
-    SamFile result = new SamLocalFile(filePath);
+    SamFile result = new DiskFile(filePath);
 
     // Open file to be written
     
@@ -69,7 +69,7 @@ public class LocalStorage extends LocalFileStore {
 
   @Override
   public SamFile getFile(String filePath) {
-    SamFile result = new SamLocalFile(filePath);
+    SamFile result = new DiskFile(filePath);
     FileMetadata metadata = readMetadata(filePath);
     result.setMetadata(metadata);
 
@@ -82,7 +82,7 @@ public class LocalStorage extends LocalFileStore {
     FileMetadata result = null;
     try (BufferedReader br = new BufferedReader(new FileReader(metadataPath))) {
       String line = br.readLine();
-      result = JsonConverter.getObjectFromJson(line, FileMetadata.class);
+      result = StockJsonConverter.getObjectFromJson(line, FileMetadata.class);
     } catch (IOException e) {
       LOG.error("Could not read metadata from: " + metadataPath);
     }
@@ -96,7 +96,7 @@ public class LocalStorage extends LocalFileStore {
     PrintWriter out = null;
     try {
       out = new PrintWriter(metadataPath);
-      out.print(JsonConverter.getJSONString(file.getMetadata()));
+      out.print(StockJsonConverter.getJSONString(file.getMetadata()));
     } catch (FileNotFoundException e) {
       LOG.error("Could not write metadata.", e);
       throw e;

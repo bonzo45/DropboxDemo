@@ -1,4 +1,4 @@
-package handlers;
+package handler;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -12,7 +12,7 @@ import mediator.LocalWebMediatorInterface;
 
 import org.apache.log4j.Logger;
 
-import storage.local.LocalStorage;
+import storage.local.disk.DiskStorage;
 
 @Path("directory")
 public class DirectoryController {
@@ -31,7 +31,7 @@ public class DirectoryController {
   @Produces(MediaType.APPLICATION_JSON)
   public Response getDirectory(@PathParam("directory") String path) {
     LOG.info("Directory Requested: " + path);
-    LocalStorage localStore = new LocalStorage();
+    DiskStorage localStore = new DiskStorage();
     LocalWebMediatorInterface mediator = new LocalWebMediator(localStore);
     Response response = mediator.getDirectory(path);
     return response;

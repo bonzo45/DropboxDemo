@@ -3,14 +3,14 @@ package jackson;
 import java.io.IOException;
 import java.util.Map;
 
-import models.FileMetadata;
+import model.FileMetadata;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 
-public class SamsFileSerializer extends JsonSerializer<FileMetadata> {
+public class WebFileSerializer extends JsonSerializer<FileMetadata> {
 
   @Override
   public void serialize(FileMetadata metadata, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonProcessingException {

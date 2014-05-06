@@ -5,9 +5,9 @@ import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.mvc.freemarker.FreemarkerMvcFeature;
 
-public class DemoApplication extends ResourceConfig {
+public class SamsApplication extends ResourceConfig {
 
-  public DemoApplication() {
+  public SamsApplication() {
     // Let the server know that we support multi-part things...
     this.register(MultiPartFeature.class);
 

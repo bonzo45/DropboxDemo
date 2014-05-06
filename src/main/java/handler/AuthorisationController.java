@@ -1,4 +1,4 @@
-package handlers;
+package handler;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -14,7 +14,7 @@ import javax.ws.rs.core.Response;
 
 import org.apache.log4j.Logger;
 
-import storage.dropbox.RESTDropbox;
+import storage.cloud.dropbox.Dropbox;
 
 /**
  * All of the handlers required for authenticating a Dropbox account with this web application.
@@ -23,7 +23,7 @@ import storage.dropbox.RESTDropbox;
 @Path("auth")
 public class AuthorisationController {
 
-  private static Logger LOG = Logger.getLogger(RESTDropbox.class);
+  private static Logger LOG = Logger.getLogger(Dropbox.class);
 
   /**
    * A way of storing Dropbox (DbxWebAuth) objects to persist state between the two calls.
@@ -34,7 +34,7 @@ public class AuthorisationController {
    * 
    * Ignored in this demo as each following state overwrites the last.
    */
-  public static Map<Integer, RESTDropbox> dbxStates = new ConcurrentHashMap<Integer, RESTDropbox>();
+  public static Map<Integer, Dropbox> dbxStates = new ConcurrentHashMap<Integer, Dropbox>();
 
   /**
    * Redirects the user to the Dropbox authentication page. This page then returns the user to the application.
@@ -46,7 +46,7 @@ public class AuthorisationController {
   @GET
   @Path("redirect_to_dropbox")
   public Response redirectAuthorisation(@Context HttpServletRequest request) {
-    RESTDropbox dropbox = new RESTDropbox();
+    Dropbox dropbox = new Dropbox();
 
     // Get Session
     HttpSession session = request.getSession(true);

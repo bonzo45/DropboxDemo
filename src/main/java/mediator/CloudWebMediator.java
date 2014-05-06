@@ -7,8 +7,8 @@ import java.security.ProviderException;
 
 import javax.ws.rs.core.Response;
 
-import storage.CloudFileStore;
 import storage.SamFile;
+import storage.cloud.CloudFileStore;
 
 public class CloudWebMediator implements CloudWebMediatorInterface {
 
@@ -23,19 +23,19 @@ public class CloudWebMediator implements CloudWebMediatorInterface {
     try {
       storage.download(source, dest);
       return Response.ok().build();
-      
+
     } catch (AccessDeniedException e) {
       return Response.status(500).build();
-      
+
     } catch (FileNotFoundException e) {
       return Response.status(404).build();
-      
+
     } catch (ProviderException e) {
       return Response.status(500).build();
-      
+
     } catch (IOException e) {
       return Response.status(500).build();
-      
+
     }
   }
 
@@ -44,19 +44,19 @@ public class CloudWebMediator implements CloudWebMediatorInterface {
     try {
       storage.upload(source, dest);
       return Response.ok().build();
-      
+
     } catch (AccessDeniedException e) {
       return Response.status(500).build();
-      
+
     } catch (FileNotFoundException e) {
       return Response.status(404).build();
-      
+
     } catch (ProviderException e) {
       return Response.status(500).build();
-      
+
     } catch (IOException e) {
       return Response.status(500).build();
-      
+
     }
   }
 

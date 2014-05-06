@@ -1,4 +1,4 @@
-package storage.local;
+package storage.local.disk;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -6,13 +6,13 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import models.FileMetadata;
+import model.FileMetadata;
 import storage.SamFile;
 import util.FileUtil;
 
-public class SamLocalFile extends SamFile {
+public class DiskFile extends SamFile {
 
-  public SamLocalFile(String relativePath) {
+  public DiskFile(String relativePath) {
     String fileName = FileUtil.extractName(relativePath);
     String filePath = FileUtil.extractPath(relativePath);
     metadata = new FileMetadata(fileName, filePath);
@@ -20,12 +20,12 @@ public class SamLocalFile extends SamFile {
 
   @Override
   public InputStream getInputStream() throws FileNotFoundException {
-    return new FileInputStream(LocalStorage.ROOT_PATH + getFullPath());
+    return new FileInputStream(DiskStorage.ROOT_PATH + getFullPath());
   }
 
   @Override
   public OutputStream getOutputStream() throws FileNotFoundException {
-    return new FileOutputStream(LocalStorage.ROOT_PATH + getFullPath());
+    return new FileOutputStream(DiskStorage.ROOT_PATH + getFullPath());
   }
 
   @Override
