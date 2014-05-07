@@ -133,7 +133,6 @@
       <button id="upload_button" onclick="triggerUpload()">Upload <i class="fa fa-upload"></i></button>
     </div><!--
     
-    
  --><div id="account_details">Click 'Authenticate' above...</div><!--
     
  --><div id="op_from_dropbox">
