@@ -7,8 +7,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import mediator.LocalWebMediator;
-import mediator.LocalWebMediatorInterface;
+import mediator.local.LocalWebMediator;
+import mediator.local.LocalWebMediatorInterface;
 
 import org.apache.log4j.Logger;
 

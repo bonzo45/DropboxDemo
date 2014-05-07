@@ -1,7 +1,5 @@
 package handler;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -12,9 +10,13 @@ import javax.ws.rs.Path;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 
+import mediator.cloud.auth.DropboxAuthWebMediator;
+import mediator.cloud.auth.DropboxAuthWebMediatorInterface;
+
 import org.apache.log4j.Logger;
 
 import storage.cloud.dropbox.Dropbox;
+import util.ResponseUtil;
 
 /**
  * All of the handlers required for authenticating a Dropbox account with this web application.
@@ -46,7 +48,9 @@ public class AuthorisationController {
   @GET
   @Path("redirect_to_dropbox")
   public Response redirectAuthorisation(@Context HttpServletRequest request) {
+    LOG.info("Redirecting to Dropbox Authorisation");
     Dropbox dropbox = new Dropbox();
+    DropboxAuthWebMediatorInterface mediator = new DropboxAuthWebMediator(dropbox);
 
     // Get Session
     HttpSession session = request.getSession(true);
@@ -55,19 +59,13 @@ public class AuthorisationController {
     // Where shall we return from the Dropbox Authentication?
     String returnURI = "http://localhost:8080/DropboxDemo/dropbox";
 
-    // Get Dropbox Authentication URL
-    String dropboxRedirect = dropbox.getAuthorisationRedirect(session, sessionKey, returnURI);
-
-    // Store the state so we can do a CSRF check when the user returns.
-    dbxStates.put(1, dropbox);
-
-    // Return the re-direct
-    try {
-      return Response.seeOther(new URI(dropboxRedirect)).build();
-    } catch (URISyntaxException e) {
-      String error = "Dropbox Redirect URISyntaxException: URI Dropbox has generated is invalid.";
-      LOG.error(error, e);
-      return Response.status(500).entity(error).build();
+    Response result = mediator.getAuthorisationRedirect(session, sessionKey, returnURI);
+    
+    if (ResponseUtil.isRedirect(result)) {
+      // Store the state so we can do a CSRF check when the user returns.
+      dbxStates.put(1, dropbox);
     }
+    
+    return result;
   }
 }

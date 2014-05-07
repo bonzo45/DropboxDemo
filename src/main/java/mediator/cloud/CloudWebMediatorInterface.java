@@ -1,4 +1,4 @@
-package mediator;
+package mediator.cloud;
 
 import javax.ws.rs.core.Response;
 

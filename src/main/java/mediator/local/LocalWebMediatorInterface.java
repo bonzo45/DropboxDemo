@@ -1,4 +1,4 @@
-package mediator;
+package mediator.local;
 
 import java.io.InputStream;
 

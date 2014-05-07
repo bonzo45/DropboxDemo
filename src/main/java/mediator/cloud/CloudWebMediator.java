@@ -1,4 +1,4 @@
-package mediator;
+package mediator.cloud;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

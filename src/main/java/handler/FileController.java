@@ -14,10 +14,10 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import mediator.CloudWebMediator;
-import mediator.CloudWebMediatorInterface;
-import mediator.LocalWebMediator;
-import mediator.LocalWebMediatorInterface;
+import mediator.cloud.CloudWebMediator;
+import mediator.cloud.CloudWebMediatorInterface;
+import mediator.local.LocalWebMediator;
+import mediator.local.LocalWebMediatorInterface;
 import model.FileMetadata;
 
 import org.apache.log4j.Logger;
