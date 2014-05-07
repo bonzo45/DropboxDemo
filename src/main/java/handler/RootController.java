@@ -40,7 +40,7 @@ public class RootController {
     Viewable result;
 
     // If returning from Dropbox authentication
-    if (token != null && authenticationCode != null) {
+    if (token != null && authenticationCode != null && !AuthorisationController.dbxStates.isEmpty()) {
       // Retrieve the Dropbox 'State' from storage.
       Dropbox dropbox = AuthorisationController.dbxStates.remove(1);
 
