@@ -3,6 +3,7 @@ body {
 	text-align: center;
 	width: 900px;
 	margin: 0 auto;
+	background-color: #FAFAFA;
 }
 
 /* Title */
@@ -26,16 +27,12 @@ h1 {
 	width: 100%;
 	height: 40px;
 	text-align: center;
-	font-size: 16pt;
+	font-size: 13pt;
+  background-color: #FAFAFA;
 }
 
 .submit {
 	visibility: hidden;
-}
-
-#account_details {
-	font-size: 20pt;
-	text-align: left;
 }
 
 /* Authentication Form */
@@ -64,6 +61,7 @@ h1 {
 #directory_wrapper {
 	width: 100%;
 	height: 200px;
+	margin-top: 20px;
 }
 
 table {
@@ -101,10 +99,13 @@ td {
 	background-color: #5A5A5A;
 	color: white;
 	font-size: 14pt;
+	text-align: left;
 }
 
 #op_upload_file {
-	width: 50%;
+	width: 100px;
+	height: 100%;
+	margin: 0px 50px 0px 50px;
 	display: inline-block;
 	vertical-align: top;
 }
@@ -115,23 +116,37 @@ td {
 }
 
 #upload_button {
-  width: 140px;
-  height: 40px;
-  font-size: 12pt;
+  width: 100%;
+  height: 100%;
+  font-size: 11pt;
   padding: 0px 0px 0px 0px;
   border: 0px;
   display: inline-block;
   vertical-align: top;
 }
 
+#account_details {
+	width: 350px;
+	margin: 0px 50px 0px 50px;
+  display: inline-block;
+  vertical-align: top;
+  font-size: 15pt;
+  line-height: 40px;
+  text-align: left;
+  color: #FCFCFC;
+}
+
 #op_from_dropbox {
-	width: 50%;
+	width: 180px;
+	height: 100%;
 	display: inline-block;
 	vertical-align: top;
+	text-align: center;
+	background-color: #007ee5;
 }
 
 #dropbox_chooser {
-	width: 50%;
+	padding-top: 5px;
   display: inline-block;
   vertical-align: top;
 }

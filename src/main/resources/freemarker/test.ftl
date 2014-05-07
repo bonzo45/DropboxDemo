@@ -107,37 +107,34 @@
 	<h1>Sam's Incredible Demonstration</h1>
 
 	<hr>
+	
+	<form id="auth_form">
+    <input type="text" id="access_token" placeholder="Been here before? Paste your access token here." class="input" value="${model! ''}"></input><!--
+ --><button id="redirect_button" onclick="redirectToDropbox()">Authenticate</button>
+  </form>
+  
+  <hr>
 
 	<div id="directory_wrapper">
 		<table id="directory">
 		</table>
 	</div>
-
-  <hr>
   
   <div id="operations">
     <div id="op_upload_file">
       <form id="upload_file" enctype="multipart/form-data">
         <input id="upload_file_field" type="file" name="file"></input>
       </form>
-      <button id="upload_button" onclick="triggerUpload()">Upload</button>
+      <button id="upload_button" onclick="triggerUpload()">Upload <i class="fa fa-upload"></i></button>
     </div><!--
     
- --><div id="op_from_dropbox"><div id="dropbox_chooser"></div>
+    
+ --><div id="account_details">Click 'Authenticate' above...</div><!--
+    
+ --><div id="op_from_dropbox">
+      <div id="dropbox_chooser"></div>
     </div>
   </div>
 
-	<hr>
-
-	<form id="auth_form">
-		<input type="text" id="access_token" placeholder="Been here before? Paste your access token here." class="input" value="${model! ''}"></input><!--
- --><button id="redirect_button" onclick="redirectToDropbox()">Authenticate</button>
-	</form>
-
-	<hr>
-
-	<div class="instructions">Your Dropbox Account</div>
-	<div id="account_details"></div>
-	
 </body>
 </html>
