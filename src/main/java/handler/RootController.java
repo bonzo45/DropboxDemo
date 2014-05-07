@@ -55,12 +55,13 @@ public class RootController {
       String accessToken = null;
       try {
         accessToken = dropbox.getAccessTokenRedirect(hashMap);
+        result = new Viewable("/test.ftl", accessToken);
+        
       } catch (BadRequestException e) {
-        /* Bad Parameters */
         LOG.warn("Dropbox BadRequestException: Parameters not well formed. " + e.getMessage());
         return Response.status(400).entity("Parameters not well formed.").build();
+        
       } catch (BadStateException e) {
-        /* Bad State */
         LOG.warn("Dropbox BadStateException: Redirecting to authentication. " + e.getMessage());
         try {
           return Response.seeOther(new URI("")).build();
@@ -68,26 +69,26 @@ public class RootController {
           LOG.error("Dropbox BadStateException URISyntaxException: Could not redirect.");
           return Response.status(500).entity("Sorry... can't re-direct you.").build();
         }
+        
       } catch (CsrfException e) {
-        /* Cross Site Request Forgery Detected (CSRF Mismatch) */
         LOG.error("Dropbox CsrfException: CSRF Mismatch. " + e.getMessage());
         return Response.status(403).entity("CSRF Check Failed").build();
+        
       } catch (NotApprovedException e) {
-        /* User Declined Permission */
         LOG.info("Dropbox NotApprovedException: authorisation not approved by user.");
         return Response.status(200).entity("User denied access to Dropbox.").build();
+        
       } catch (ProviderException e) {
-        /* Problems with Dropbox */
         LOG.warn("Dropbox ProviderException: error communicating with Dropbox. " + e.getMessage());
         return Response.status(503).entity("Could not communicate with Dropbox").build();
+        
       } catch (DbxException e) {
-        /* General Catch All */
         LOG.warn("Dropbox DbxException: general exception thrown. " + e.getMessage());
         return Response.status(503).entity("Could not communicate with Dropbox").build();
+        
       }
-      result = new Viewable("/test.ftl", accessToken);
     } else {
-      result = new Viewable("/test.ftl");
+      result = new Viewable("/index.ftl");
     }
 
     return Response.ok(result).build();
