@@ -16,7 +16,7 @@ import model.FileMetadata;
 
 import org.apache.log4j.Logger;
 
-import storage.SamFile;
+import storage.local.LocalFile;
 import storage.local.LocalFileStore;
 
 public class DiskStorage extends LocalFileStore {
@@ -27,11 +27,11 @@ public class DiskStorage extends LocalFileStore {
   public static final String METADATA_SUFFIX = ".meta";
 
   @Override
-  public SamFile newFile(String filePath, InputStream inputStream) throws FileNotFoundException, IOException {
-    SamFile result = new DiskFile(filePath);
+  public LocalFile newFile(String filePath, InputStream inputStream) throws FileNotFoundException, IOException {
+    LocalFile result = new DiskFile(filePath);
 
     // Open file to be written
-    
+
     OutputStream outputStream;
     try {
       outputStream = result.getOutputStream();
@@ -39,9 +39,9 @@ public class DiskStorage extends LocalFileStore {
       LOG.error("File could not be opened for writing.", e);
       throw e;
     }
-    
+
     // Write data
-    
+
     int read = 0;
     byte[] bytes = new byte[1024];
 
@@ -53,9 +53,9 @@ public class DiskStorage extends LocalFileStore {
       LOG.error("Error whilst writing to file.", e);
       throw e;
     }
-    
+
     // Close file
-    
+
     try {
       outputStream.flush();
       outputStream.close();
@@ -68,8 +68,8 @@ public class DiskStorage extends LocalFileStore {
   }
 
   @Override
-  public SamFile getFile(String filePath) {
-    SamFile result = new DiskFile(filePath);
+  public LocalFile getFile(String filePath) {
+    LocalFile result = new DiskFile(filePath);
     FileMetadata metadata = readMetadata(filePath);
     result.setMetadata(metadata);
 
@@ -90,7 +90,7 @@ public class DiskStorage extends LocalFileStore {
   }
 
   @Override
-  public void persistMetadata(SamFile file) throws FileNotFoundException, SecurityException {
+  public void persistMetadata(LocalFile file) throws FileNotFoundException, SecurityException {
     String metadataPath = ROOT_PATH + file.getFullPath() + METADATA_SUFFIX;
 
     PrintWriter out = null;
@@ -100,12 +100,11 @@ public class DiskStorage extends LocalFileStore {
     } catch (FileNotFoundException e) {
       LOG.error("Could not write metadata.", e);
       throw e;
-      
+
     } catch (SecurityException e) {
       LOG.error("Could not write metadata due to permissions.", e);
       throw e;
-    }
-    finally {
+    } finally {
       if (out != null) {
         out.close();
       }
@@ -137,7 +136,7 @@ public class DiskStorage extends LocalFileStore {
 
       // If it's not hidden or metadata, add it to the list.
       if (!fileName.endsWith(METADATA_SUFFIX) && !fileName.startsWith(".")) {
-         directoryModel.addFile(getFile(file.getName()).getMetadata());
+        directoryModel.addFile(getFile(file.getName()).getMetadata());
       }
     }
 

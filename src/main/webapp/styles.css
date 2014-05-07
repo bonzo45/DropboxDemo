@@ -1,47 +1,69 @@
 body {
-  font-family: helvetica;
-  text-align: center;
-  width: 900px;
-  margin: 0 auto;
+	font-family: helvetica;
+	text-align: center;
+	width: 900px;
+	margin: 0 auto;
 }
 
 /* Title */
 h1 {
-  font-size: 40pt;
+	font-size: 40pt;
 }
 
 .instructions {
-  font-style: italic;
-  color: #808080;
-  font-size: 16pt;
-  margin: 10px 0px 10px 0px;
-}
-
-.url {
-  color: #003366;
-  font-size: 8pt;
-  margin-bottom: 15px;
+	font-style: italic;
+	color: #808080;
+	font-size: 16pt;
+	margin: 10px 0px 10px 0px;
 }
 
 .accessTokenGenerated {
-  color: #009933;
+	color: #009933;
 }
 
 /* Form Things */
 .input {
-  width: 100%;
-  height: 40px;
-  text-align: center;
-  font-size: 16pt;
+	width: 100%;
+	height: 40px;
+	text-align: center;
+	font-size: 16pt;
 }
 
 .submit {
-  visibility: hidden;
+	visibility: hidden;
 }
 
 #account_details {
 	font-size: 20pt;
 	text-align: left;
+}
+
+/* Authentication Form */
+#redirect_button {
+	width: 140px;
+	height: 40px;
+	font-size: 12pt;
+	padding: 0px 0px 0px 0px;
+	border: 0px;
+	display: inline-block;
+	vertical-align: top;
+}
+
+#access_token {
+	width: 750px;
+	height: 40px;
+	padding: 0px 0px 0px 0px;
+	margin: 0px 10px 0px 0px; 
+	border : 0px;
+	display: inline-block;
+	vertical-align: top;
+	border: 0px;
+}
+
+/* Directory & Files */
+#directory_wrapper {
+	width: 100%;
+	height: 200px;
 }
 
 table {
@@ -72,8 +94,44 @@ td {
 	color: grey;
 }
 
-.redirect_button {
-	width: 250px;
+/* Operations */
+#operations {
+	width: 100%;
 	height: 40px;
-	font-size: 12pt;
+	background-color: #5A5A5A;
+	color: white;
+	font-size: 14pt;
+}
+
+#op_upload_file {
+	width: 50%;
+	display: inline-block;
+	vertical-align: top;
+}
+
+#upload_file {
+	height: 0px;
+	overflow: hidden;
+}
+
+#upload_button {
+  width: 140px;
+  height: 40px;
+  font-size: 12pt;
+  padding: 0px 0px 0px 0px;
+  border: 0px;
+  display: inline-block;
+  vertical-align: top;
+}
+
+#op_from_dropbox {
+	width: 50%;
+	display: inline-block;
+	vertical-align: top;
+}
+
+#dropbox_chooser {
+	width: 50%;
+  display: inline-block;
+  vertical-align: top;
 }

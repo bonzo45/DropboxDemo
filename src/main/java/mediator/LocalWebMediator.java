@@ -13,7 +13,8 @@ import javax.ws.rs.core.Response;
 
 import model.DirectoryMetadata;
 import model.FileMetadata;
-import storage.SamFile;
+import storage.AbstractFile;
+import storage.local.LocalFile;
 import storage.local.LocalFileStore;
 
 public class LocalWebMediator implements LocalWebMediatorInterface {
@@ -46,7 +47,7 @@ public class LocalWebMediator implements LocalWebMediatorInterface {
   }
 
   @Override
-  public Response persistMetadata(SamFile file) {
+  public Response persistMetadata(LocalFile file) {
     try {
       storage.persistMetadata(file);
       return Response.ok().build();
@@ -69,7 +70,7 @@ public class LocalWebMediator implements LocalWebMediatorInterface {
   @Override
   public Response getFile(String filePath) {
     try {
-      SamFile file = storage.getFile(filePath);
+      AbstractFile file = storage.getFile(filePath);
       String content = StockJsonConverter.getJSONString(file.getMetadata());
       return Response.ok().entity(content).build();
 

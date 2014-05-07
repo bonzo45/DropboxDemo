@@ -7,10 +7,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import model.FileMetadata;
-import storage.SamFile;
+import storage.local.LocalFile;
 import util.FileUtil;
 
-public class DiskFile extends SamFile {
+public class DiskFile extends LocalFile {
 
   public DiskFile(String relativePath) {
     String fileName = FileUtil.extractName(relativePath);

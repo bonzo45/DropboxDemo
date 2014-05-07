@@ -2,12 +2,26 @@ package mediator;
 
 import javax.ws.rs.core.Response;
 
-import storage.SamFile;
+import storage.cloud.CloudFile;
+import storage.local.LocalFile;
 
 public interface CloudWebMediatorInterface {
 
-  public Response download(SamFile source, SamFile dest);
+  /**
+   * Wraps around a CloudFileStore download, building an appropriate HTTP response.
+   * 
+   * @param source
+   * @param dest
+   * @return
+   */
+  public Response download(CloudFile source, LocalFile dest);
 
-  public Response upload(SamFile source, SamFile dest);
+  /**
+   * Wraps around a CloudFileStore upload, building an appropriate HTTP response.
+   * @param source
+   * @param dest
+   * @return
+   */
+  public Response upload(LocalFile source, CloudFile dest);
 
 }

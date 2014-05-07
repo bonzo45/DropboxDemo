@@ -17,8 +17,9 @@ import model.FileMetadata;
 
 import org.apache.log4j.Logger;
 
-import storage.SamFile;
+import storage.cloud.CloudFile;
 import storage.cloud.CloudFileStore;
+import storage.local.LocalFile;
 import util.FileUtil;
 import application.DoNotCommitToGitHub;
 
@@ -104,7 +105,7 @@ public class Dropbox implements CloudFileStore {
    * @param dest
    *          - destination file path e.g. "/images/image.jpg"
    */
-  public void upload(SamFile source, SamFile dest) throws FileNotFoundException, AccessDeniedException, IOException, ProviderException {
+  public void upload(LocalFile source, CloudFile dest) throws FileNotFoundException, AccessDeniedException, IOException, ProviderException {
     LOG.info("Dropbox Upload: Uploading " + source + " to " + dest);
 
     InputStream inputStream = null;
@@ -157,7 +158,7 @@ public class Dropbox implements CloudFileStore {
    * @return
    * @throws FileNotFoundException
    */
-  public void download(SamFile source, SamFile dest) throws FileNotFoundException, AccessDeniedException, IOException, ProviderException {
+  public void download(CloudFile source, LocalFile dest) throws FileNotFoundException, AccessDeniedException, IOException, ProviderException {
     LOG.info("Downloading " + source + " to " + dest);
 
     OutputStream outputStream = null;
@@ -244,19 +245,19 @@ public class Dropbox implements CloudFileStore {
   public FileMetadata downloadMetadata(String fullPath) throws DbxException {
     // Download the Metadata
     DbxEntry entry = client.getMetadata(fullPath);
-    
+
     // Build FileMetadata from response.
     FileMetadata result = new FileMetadata(entry.name, FileUtil.extractPath(entry.path));
     result.setFile(entry.isFile());
     result.setDirectory(entry.isFolder());
     DbxEntry.File fileEntry = entry.asFile();
     result.setLastModifiedTime(fileEntry.lastModified.getTime());
-    
+
     // Add to the metadata that the file is stored in Dropbox.
     Map<String, String> copies = new HashMap<String, String>();
     copies.put("dropbox", fullPath);
     result.setCopies(copies);
-    
+
     return result;
   }
 }

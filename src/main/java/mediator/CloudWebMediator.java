@@ -7,8 +7,9 @@ import java.security.ProviderException;
 
 import javax.ws.rs.core.Response;
 
-import storage.SamFile;
+import storage.cloud.CloudFile;
 import storage.cloud.CloudFileStore;
+import storage.local.LocalFile;
 
 public class CloudWebMediator implements CloudWebMediatorInterface {
 
@@ -19,7 +20,7 @@ public class CloudWebMediator implements CloudWebMediatorInterface {
   }
 
   @Override
-  public Response download(SamFile source, SamFile dest) {
+  public Response download(CloudFile source, LocalFile dest) {
     try {
       storage.download(source, dest);
       return Response.ok().build();
@@ -40,7 +41,7 @@ public class CloudWebMediator implements CloudWebMediatorInterface {
   }
 
   @Override
-  public Response upload(SamFile source, SamFile dest) {
+  public Response upload(LocalFile source, CloudFile dest) {
     try {
       storage.upload(source, dest);
       return Response.ok().build();

@@ -1,14 +1,22 @@
 function dropboxInit() {
 	setupChooser();
+	getAccountDetails();
+	
+	// When the access token changes, get the account details to see if it works.
+	$('#access_token').on('input', getAccountDetails);
 }
 
 function redirectToDropbox() {
-	$("#redirect_form").attr("action", URL_REDIRECT_TO_DROPBOX);
-	$("#redirect_form")[0].submit();
+	$("#auth_form").attr("action", URL_REDIRECT_TO_DROPBOX);
+	$("#auth_form")[0].submit();
 }
 
 function getAccountDetails() {
 	var access_token = $("#access_token").val();
+	if (access_token === "") {
+		return;
+	}
+	
 	$.getJSON("dropbox/account_details", {
 		"access_token" : access_token
 	}, function(data) {

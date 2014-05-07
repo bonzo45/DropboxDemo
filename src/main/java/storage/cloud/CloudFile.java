@@ -1,5 +1,7 @@
 package storage.cloud;
 
-public class CloudFile {
+import storage.AbstractFile;
+
+public class CloudFile extends AbstractFile {
 
 }

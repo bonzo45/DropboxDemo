@@ -1,3 +1,7 @@
+function triggerUpload() {
+	$("#upload_file_field").click();
+}
+
 // Asynchronous File Upload
 function uploadFile() {
 	var fileObj = $("#upload_file_field");

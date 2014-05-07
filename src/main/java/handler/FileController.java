@@ -24,12 +24,13 @@ import org.apache.log4j.Logger;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
-import storage.SamFile;
+import storage.cloud.CloudFile;
 import storage.cloud.CloudFileStore;
 import storage.cloud.dropbox.Dropbox;
 import storage.cloud.dropbox.DropboxFile;
-import storage.local.disk.DiskStorage;
+import storage.local.LocalFile;
 import storage.local.disk.DiskFile;
+import storage.local.disk.DiskStorage;
 import util.ResponseUtil;
 
 @Path("files/{file_path}")
@@ -106,8 +107,8 @@ public class FileController {
     CloudFileStore dropbox = new Dropbox(accessToken);
     CloudWebMediatorInterface mediator = new CloudWebMediator(dropbox);
 
-    SamFile source = localStore.getFile(filePath);
-    SamFile dest = new DropboxFile(filePath);
+    LocalFile source = localStore.getFile(filePath);
+    CloudFile dest = new DropboxFile(filePath);
     Response response = mediator.upload(source, dest);
 
     // If upload was successful, save metadata.
@@ -139,8 +140,8 @@ public class FileController {
     CloudFileStore dropbox = new Dropbox(accessToken);
     CloudWebMediatorInterface mediator = new CloudWebMediator(dropbox);
 
-    SamFile source = new DropboxFile(filePath);
-    SamFile dest = new DiskFile(filePath);
+    CloudFile source = new DropboxFile(filePath);
+    LocalFile dest = new DiskFile(filePath);
     Response response = mediator.download(source, dest);
 
     // If download successful, save metadata.
