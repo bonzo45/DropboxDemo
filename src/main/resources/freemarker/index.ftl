@@ -89,6 +89,11 @@
 <script>
 	function init() {
 		dropboxInit();
+		
+	  // When the file is selected, upload it.
+	  $('#upload_file_field').on('change', function() {
+		  uploadFile();
+	  });
 
 		/* Display files at server 'root' directory */
 		rootDirectory = new DirectoryCollection();

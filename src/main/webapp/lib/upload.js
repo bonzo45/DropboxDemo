@@ -1,4 +1,5 @@
-function triggerUpload() {
+function triggerUpload() {	
+	// Trigger the file picker.
 	$("#upload_file_field").click();
 }
 

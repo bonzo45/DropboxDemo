@@ -26,6 +26,8 @@ public class DiskStorage extends LocalFileStore {
   public static final String ROOT_PATH = "/Users/Sam/files/";
   public static final String METADATA_SUFFIX = ".meta";
 
+  private static final long MAX_FILE_SIZE = 1000000;
+
   @Override
   public LocalFile newFile(String filePath, InputStream inputStream) throws FileNotFoundException, IOException {
     LocalFile result = new DiskFile(filePath);
@@ -43,12 +45,20 @@ public class DiskStorage extends LocalFileStore {
     // Write data
 
     int read = 0;
+    long totalRead = 0;
     byte[] bytes = new byte[1024];
 
     try {
       while ((read = inputStream.read(bytes)) != -1) {
+        totalRead += read;
+        if (totalRead > MAX_FILE_SIZE) {
+          IOException e = new IOException("File exceeded upload limit of " + MAX_FILE_SIZE + " bytes.");
+          LOG.error("File too large to upload.", e);
+          throw e;
+        }
         outputStream.write(bytes, 0, read);
       }
+      LOG.info("Finished Uploading");
     } catch (IOException e) {
       LOG.error("Error whilst writing to file.", e);
       throw e;
@@ -56,12 +66,14 @@ public class DiskStorage extends LocalFileStore {
 
     // Close file
 
-    try {
-      outputStream.flush();
-      outputStream.close();
-    } catch (IOException e) {
-      LOG.error("Could not flush and close destination file.", e);
-      throw e;
+    finally {
+      try {
+        outputStream.flush();
+        outputStream.close();
+      } catch (IOException e) {
+        LOG.error("Could not flush and close destination file.", e);
+        throw e;
+      }
     }
 
     return result;

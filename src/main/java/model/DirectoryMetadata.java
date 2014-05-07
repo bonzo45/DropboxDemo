@@ -1,7 +1,5 @@
 package model;
 
-import jackson.StockJsonConverter;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,26 +31,6 @@ public class DirectoryMetadata {
   public void addFile(FileMetadata file) {
     files.add(file);
   }
-
-  /**
-   * Returns a JSON representation of a directory.
-   * 
-   * @return
-   */
-  public String toJSON() {
-    String result = "";
-    for (FileMetadata file : files) {
-      result += StockJsonConverter.getJSONString(file);
-      result += ",";
-    }
-
-    if (result.equals("")) {
-      return "[]";
-    }
-
-    return "[" + result.substring(0, result.length() - 1) + "]";
-  }
-
   
   public List<FileMetadata> getFiles() {
     return files;
