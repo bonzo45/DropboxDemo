@@ -5,8 +5,7 @@
 <link rel="stylesheet" type="text/css" href="/DropboxDemo/styles.css">
 
 <!-- Backbone Underscore and JQuery -->
-<script
-	src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script	src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <script src="/DropboxDemo/lib/underscore-min.js"></script>
 <script src="/DropboxDemo/lib/backbone-min.js"></script>
 

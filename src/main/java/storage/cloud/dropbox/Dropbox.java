@@ -20,7 +20,6 @@ import org.apache.log4j.Logger;
 import storage.cloud.CloudFile;
 import storage.cloud.CloudFileStore;
 import storage.local.LocalFile;
-import util.FileUtil;
 import application.DoNotCommitToGitHub;
 
 import com.dropbox.core.DbxAccountInfo;
@@ -46,7 +45,7 @@ public class Dropbox implements CloudFileStore {
   private DbxAppInfo appInfo;
   private DbxRequestConfig config;
 
-  /* Authorisation */
+  // Authorisation
   private DbxWebAuth webAuth;
   private DbxSessionStore csrfTokenStore;
 
@@ -165,9 +164,9 @@ public class Dropbox implements CloudFileStore {
 
     try {
       // Download File
-      client.getFile(source.getFullPath(), null, dest.getOutputStream());
+      DbxEntry metadata = client.getFile(source.getFullPath(), null, dest.getOutputStream());
       // Download Metadata
-      dest.setIndependentMetadata(downloadMetadata(source.getFullPath()));
+      dest.setIndependentMetadata(convertMetadata(metadata));
       LOG.info("Download Successful");
 
     } catch (FileNotFoundException e) {
@@ -237,17 +236,14 @@ public class Dropbox implements CloudFileStore {
   }
 
   /**
-   * Downloads and Converts Dropbox Metadata to Uniform Metadata
+   * Converts Dropbox Metadata to Uniform Metadata
    * 
    * @param entry
    * @return
    */
-  public FileMetadata downloadMetadata(String fullPath) throws DbxException {
-    // Download the Metadata
-    DbxEntry entry = client.getMetadata(fullPath);
-
+  private FileMetadata convertMetadata(DbxEntry entry) throws DbxException {
     // Build FileMetadata from response.
-    FileMetadata result = new FileMetadata(entry.name, FileUtil.extractPath(entry.path));
+    FileMetadata result = new FileMetadata(entry.name, entry.path);
     result.setFile(entry.isFile());
     result.setDirectory(entry.isFolder());
     DbxEntry.File fileEntry = entry.asFile();
@@ -255,7 +251,7 @@ public class Dropbox implements CloudFileStore {
 
     // Add to the metadata that the file is stored in Dropbox.
     Map<String, String> copies = new HashMap<String, String>();
-    copies.put("dropbox", fullPath);
+    copies.put("dropbox", entry.path);
     result.setCopies(copies);
 
     return result;
