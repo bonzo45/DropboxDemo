@@ -30,6 +30,10 @@ public class FileMetadata {
     this.path = FileUtil.extractPath(fullPath);
   }
 
+  public FileMetadata() {
+    
+  }
+  
   /*
    * Constructor for when all attributes are not yet known.
    */
