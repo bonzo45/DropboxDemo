@@ -7,7 +7,7 @@
 <!-- Backbone Underscore and JQuery -->
 <script	src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <script src="/DropboxDemo/lib/underscore-min.js"></script>
-<script src="/DropboxDemo/lib/backbone-min.js"></script>
+<script src="/DropboxDemo/lib/backbone.js"></script>
 
 <!-- Dropbox Chooser -->
 <script type="text/javascript"
@@ -37,7 +37,7 @@
 
       <td>
         <% 
-        if (inDropbox) {
+        if (isInDropbox) {
           print('<i class="fa fa-dropbox yes"></i>');
         }
         else {
